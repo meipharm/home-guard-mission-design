@@ -50,7 +50,7 @@ h3 { font-size: 19px; margin: 22px 0 6px; }
 .hero .eyebrow { margin-top: 0; }
 
 .card { border: 2px solid var(--line); border-radius: 10px; padding: 14px 18px; margin: 12px 0; background: var(--panel); }
-.card strong:first-child { display: block; color: var(--olive-dark); margin-bottom: 4px; }
+.card > strong:first-child { display: block; color: var(--olive-dark); margin-bottom: 4px; }
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
 .grid .card { margin: 0; }
 .grid a.card { display: block; text-decoration: none; color: var(--ink); }
