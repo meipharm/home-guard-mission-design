@@ -1,0 +1,87 @@
+:root {
+  --bg: #f4f1e8;
+  --panel: #ffffff;
+  --ink: #1f2a1f;
+  --gray: #55604f;
+  --olive: #4b5d2e;
+  --olive-dark: #34421f;
+  --khaki: #c9b98a;
+  --khaki-soft: #efe8d2;
+  --signal: #d9822b;
+  --alert: #b3392f;
+  --line: #d8d0b8;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Microsoft JhengHei", "PingFang TC", "Noto Sans TC", sans-serif;
+  font-size: 17px;
+  line-height: 1.75;
+}
+
+a { color: var(--olive); }
+a:focus-visible { outline: 3px solid var(--signal); outline-offset: 2px; border-radius: 4px; }
+
+/* 頁首：深橄欖綠，像任務終端機 */
+.site-header { background: var(--olive-dark); border-bottom: 4px solid var(--signal); }
+.site-header .inner { max-width: 960px; margin: 0 auto; padding: 14px 16px 0; }
+.brand { color: #fff; text-decoration: none; font-weight: bold; font-size: 20px; letter-spacing: 1px; }
+.brand span { color: var(--khaki); font-size: 15px; margin-left: 6px; }
+.nav { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 0; padding: 0 0 12px; list-style: none; }
+.nav a { display: inline-block; color: #e9e4d2; text-decoration: none; font-size: 15px; padding: 3px 12px; border: 1px solid #6b7a4c; border-radius: 4px; }
+.nav a:hover { background: var(--olive); }
+.nav a[aria-current="page"] { background: var(--signal); border-color: var(--signal); color: #fff; font-weight: bold; }
+
+main { max-width: 960px; margin: 0 auto; padding: 8px 16px 40px; }
+h1 { font-size: 30px; line-height: 1.35; margin: 28px 0 8px; }
+h2 { font-size: 23px; margin: 36px 0 10px; padding-left: 12px; border-left: 6px solid var(--olive); }
+h3 { font-size: 19px; margin: 22px 0 6px; }
+.eyebrow { color: var(--signal); font-weight: bold; letter-spacing: 2px; margin: 24px 0 0; font-size: 14px; }
+.lead { font-size: 19px; color: var(--gray); margin-top: 0; }
+.note { color: var(--gray); font-size: 15px; }
+
+.hero { background: var(--olive-dark); color: #f3efe2; border-radius: 10px; padding: 22px 22px 26px; margin-top: 20px; }
+.hero h1 { margin-top: 4px; color: #fff; }
+.hero .lead { color: #d9d3bd; }
+.hero .eyebrow { margin-top: 0; }
+
+.card { border: 2px solid var(--line); border-radius: 10px; padding: 14px 18px; margin: 12px 0; background: var(--panel); }
+.card strong:first-child { display: block; color: var(--olive-dark); margin-bottom: 4px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+.grid .card { margin: 0; }
+.grid a.card { display: block; text-decoration: none; color: var(--ink); }
+.grid a.card:hover { border-color: var(--signal); }
+
+.callout { border-left: 6px solid var(--signal); background: var(--khaki-soft); border-radius: 6px; padding: 10px 16px; margin: 14px 0; }
+.callout.alert { border-left-color: var(--alert); background: #f8e7e4; }
+
+.tag { display: inline-block; font-size: 13px; padding: 0 8px; border-radius: 4px; background: var(--khaki-soft); border: 1px solid var(--khaki); color: var(--olive-dark); margin-right: 4px; }
+.tag.draft { background: #f8e7e4; border-color: #e0a59e; color: var(--alert); }
+
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; background: var(--panel); margin: 10px 0; font-size: 16px; }
+th, td { border: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+th { background: var(--khaki-soft); }
+
+ol.steps { counter-reset: s; list-style: none; padding: 0; }
+ol.steps li { counter-increment: s; position: relative; padding: 8px 12px 8px 48px; margin: 8px 0; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; }
+ol.steps li::before { content: counter(s); position: absolute; left: 10px; top: 8px; width: 28px; height: 28px; border-radius: 50%; background: var(--olive); color: #fff; text-align: center; line-height: 28px; font-weight: bold; }
+
+.flow { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 12px 0; }
+.flow span { background: var(--olive); color: #fff; padding: 4px 12px; border-radius: 4px; font-size: 15px; }
+.flow i { color: var(--gray); font-style: normal; }
+
+.quote { font-size: 20px; font-weight: bold; color: var(--olive-dark); }
+.en { font-family: "Segoe UI", Arial, sans-serif; }
+
+.pager { display: flex; justify-content: space-between; gap: 12px; margin-top: 40px; padding-top: 14px; border-top: 1px solid var(--line); }
+footer { text-align: center; color: var(--gray); font-size: 14px; padding: 16px; border-top: 1px solid var(--line); }
+
+@media (max-width: 600px) {
+  h1 { font-size: 25px; }
+  .hero { padding: 18px 16px; }
+}

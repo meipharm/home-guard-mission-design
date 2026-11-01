@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>家長引導與技術｜家園救援任務 設計規劃</title>
+  <meta name="description" content="家園救援任務：以戰術任務風格帶孩子學居家韌性、急救止血與英文單字的互動學習網頁設計規劃。">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header"><div class="inner">
+    <a class="brand" href="index.html">家園救援任務<span>Operation Home Guard｜設計規劃</span></a>
+    <nav aria-label="網站導覽"><ul class="nav">
+      <li><a href="index.html">首頁</a></li>
+      <li><a href="positioning.html">1 定位與界線</a></li>
+      <li><a href="gameplay.html">2 遊戲流程與任務</a></li>
+      <li><a href="english.html">3 英文與發音</a></li>
+      <li><a href="child-idea.html">4 孩子的建議</a></li>
+      <li><a href="parents-tech.html" aria-current="page">5 家長引導與技術</a></li>
+      <li><a href="decisions.html">6 決策與下一步</a></li>
+    </ul></nav>
+  </div></header>
+  <main>
+<h1>家長引導與技術</h1>
+<p class="lead">家長是陪玩的引導者；網頁是離線、不存資料的單純網頁。</p>
+
+<h2>每關的家長小卡</h2>
+<p>每關有一張可以收合的小卡，內容包括：</p>
+<ol class="steps">
+  <li><strong>這關在學什麼</strong>：一句話說明學習重點。</li>
+  <li><strong>可以問孩子的一句話</strong>：例如「為什麼要先看地上有沒有玻璃？」</li>
+  <li><strong>孩子卡住時怎麼提示</strong>：先給線索，不直接說答案。</li>
+  <li><strong>真實生活的延伸</strong>：例如一起檢查家裡的避難包、找出家中集合點。</li>
+</ol>
+
+<h2>技術規劃</h2>
+<div class="table-wrap"><table>
+  <tr><th>項目</th><th>做法</th></tr>
+  <tr><td>頁面</td><td>獨立頁面，不放進原本的作文工具</td></tr>
+  <tr><td>技術</td><td>只用 HTML、CSS、原生 JavaScript；不用框架、不裝套件、不載入外部資源</td></tr>
+  <tr><td>資料</td><td>任務、裝備、單字放在獨立的資料檔，雙擊就能離線開啟</td></tr>
+  <tr><td>隱私</td><td>不儲存任何資料、不蒐集個資、不使用麥克風</td></tr>
+  <tr><td>圖像</td><td>用 CSS 與向量圖繪製，不使用外部圖檔</td></tr>
+  <tr><td>測試</td><td>檢查資料完整：每件裝備都有英文與音節、每關都有家長小卡</td></tr>
+</table></div>
+<nav class="pager" aria-label="上下頁">
+  <span><a href="child-idea.html">← 4 孩子的建議</a></span>
+  <span><a href="decisions.html">6 決策與下一步 →</a></span>
+</nav>
+  </main>
+  <footer>設計草案，急救內容尚未經官方核對，不可作為急救教學。本專案為原創設計，與任何遊戲公司無關。</footer>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>遊戲流程與任務｜家園救援任務 設計規劃</title>
+  <meta name="description" content="家園救援任務：以戰術任務風格帶孩子學居家韌性、急救止血與英文單字的互動學習網頁設計規劃。">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header"><div class="inner">
+    <a class="brand" href="index.html">家園救援任務<span>Operation Home Guard｜設計規劃</span></a>
+    <nav aria-label="網站導覽"><ul class="nav">
+      <li><a href="index.html">首頁</a></li>
+      <li><a href="positioning.html">1 定位與界線</a></li>
+      <li><a href="gameplay.html" aria-current="page">2 遊戲流程與任務</a></li>
+      <li><a href="english.html">3 英文與發音</a></li>
+      <li><a href="child-idea.html">4 孩子的建議</a></li>
+      <li><a href="parents-tech.html">5 家長引導與技術</a></li>
+      <li><a href="decisions.html">6 決策與下一步</a></li>
+    </ul></nav>
+  </div></header>
+  <main>
+<h1>遊戲流程與任務</h1>
+<p class="lead">孩子用第一人稱扮演救援隊員，從整備到完成任務，每一步都由自己選擇「我要做什麼」。</p>
+
+<h2>整體流程</h2>
+<div class="flow"><span>任務簡報</span><i>→</i><span>整備室：選裝備＋單字</span><i>→</i><span>任務關卡</span><i>→</i><span>任務覆盤</span><i>→</i><span>單字回顧</span><i>→</i><span>宣傳卡</span></div>
+
+<h2>第一人稱畫面</h2>
+<ul>
+  <li>像戴著頭盔看出去：上方是任務目標與時間，左下是背包欄位，右下是無線電對話框。</li>
+  <li>場景用網頁內建的 CSS 與向量圖畫（雙手、止血帶、手臂示意），不需要外部圖檔。</li>
+  <li>互動方式：選擇行動、點選位置（例如止血帶要綁在哪）、按住轉動絞棒。</li>
+</ul>
+
+<h2>整備室：選裝備</h2>
+<ul>
+  <li>背包只有 <strong>6 格</strong>，要從 12 件物品裡挑，形成策略取捨。</li>
+  <li>有干擾物品（遊戲機、零食）。選了不扣分，覆盤時問孩子：「這次有用到嗎？」</li>
+  <li>任務中缺少某件裝備時，改用替代方案（沒有紗布就用乾淨的布），並說明原因。</li>
+  <li>每張裝備卡有英文單字與發音，詳見<a href="english.html">英文與發音</a>。</li>
+</ul>
+
+<h2>六個任務</h2>
+<p>原本規劃四個任務；孩子建議加入地震、防空與包紮後，擴充為六個。</p>
+<div class="table-wrap"><table>
+  <tr><th>任務</th><th>情境</th><th>學習重點</th><th>新單字</th></tr>
+  <tr><td>1 基地整備</td><td>整理避難包</td><td>居家韌性清單、家中集合點</td><td class="en">flashlight, battery, water</td></tr>
+  <tr><td>2 地震</td><td>在家遇到搖晃</td><td>趴下、掩護、穩住；搖完後穿鞋、避開碎玻璃</td><td class="en">earthquake, drop, cover, hold on</td></tr>
+  <tr><td>3 防空警報</td><td>聽到警報聲</td><td>就近到避難處所、遠離窗戶、保護頭部、聽廣播指示</td><td class="en">siren, shelter</td></tr>
+  <tr><td>4 現場評估</td><td>家人被碎玻璃割傷</td><td>先確認安全，再叫大人、撥 119 說清楚地址</td><td class="en">safe, help, call</td></tr>
+  <tr><td>5 簡易包紮</td><td>手掌割傷</td><td>洗手戴手套、加壓止血、紗布覆蓋、繃帶不要太緊（看手指顏色）</td><td class="en">gauze, bandage, press</td></tr>
+  <tr><td>6 止血帶</td><td>大腿大量出血，壓不住</td><td>止血帶操作步驟（見下方）</td><td class="en">tourniquet, tighten, twist</td></tr>
+</table></div>
+<p><strong>第一版原型先做：</strong>任務 2 地震（全家都用得到）＋任務 6 止血帶（孩子最有興趣），用來確認風格與難度。</p>
+
+<h2>止血帶步驟 <span class="tag draft">草案，待官方核對</span></h2>
+<ol class="steps">
+  <li>綁在傷口上方約 5 到 8 公分，避開關節；不確定位置時，綁「高且緊」。</li>
+  <li>拉緊帶子，貼好魔鬼氈。</li>
+  <li>轉絞棒，直到不再流血。</li>
+  <li>固定絞棒。</li>
+  <li>記下綁上的時間。</li>
+  <li>不要自己鬆開，等待救護人員。</li>
+</ol>
+<p>完成後用無線電英文回報，例如 <span class="en">“Tourniquet on! Time 14:30.”</span></p>
+<div class="callout">地震、防空與包紮步驟同樣要以官方資料（例如內政部《台灣全民安全指引》、消防署、紅十字會）核對後才寫進網頁。</div>
+
+<h2>犯錯時怎麼回饋</h2>
+<ul>
+  <li>不扣血、不出現失敗畫面；由「隊長」用無線電說明為什麼，再讓孩子重選。</li>
+  <li>出血量條只用來表現急迫感，可以關掉。</li>
+  <li>英文部分完全不計時。</li>
+</ul>
+
+<h2>任務覆盤</h2>
+<ul>
+  <li>三個問題：做對了什麼？哪一步要再想想？在真實的家裡會怎麼做？</li>
+  <li>翻一張「遊戲 vs 現實」破解卡（見<a href="child-idea.html">孩子的建議</a>）。</li>
+  <li>授予徽章，例如「安全偵察員」「止血專家」；不排名、不比分數。</li>
+</ul>
+<nav class="pager" aria-label="上下頁">
+  <span><a href="positioning.html">← 1 定位與界線</a></span>
+  <span><a href="english.html">3 英文與發音 →</a></span>
+</nav>
+  </main>
+  <footer>設計草案，急救內容尚未經官方核對，不可作為急救教學。本專案為原創設計，與任何遊戲公司無關。</footer>
+</body>
+</html>
