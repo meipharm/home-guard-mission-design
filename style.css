@@ -71,6 +71,10 @@ strong { color: #fff; }
 .hero .lead { color: #c4d1ca; }
 .hero .eyebrow { margin-top: 0; }
 .hero .emblem { width: 100%; max-width: 200px; filter: drop-shadow(0 0 16px rgba(61, 220, 132, 0.6)); }
+.nowrap { white-space: nowrap; }
+.cta { display: inline-block; margin-top: 14px; background: var(--green); color: #04130b; font-weight: bold; text-decoration: none; padding: 10px 26px; clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%); }
+.cta:hover { filter: brightness(1.12); }
+.nav a.nav-game { border-color: var(--green); color: var(--green); font-weight: bold; }
 .hero .tagline { font-family: var(--mono); color: var(--green); letter-spacing: 2px; border-top: 1px solid var(--green-dim); padding-top: 8px; margin: 14px 0 0; display: inline-block; }
 
 /* 卡片：四角準星框線 */
