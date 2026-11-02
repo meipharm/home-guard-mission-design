@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>家長引導與技術｜家園救援任務 設計規劃</title>
-  <meta name="description" content="家園救援任務：以戰術任務風格帶孩子學居家韌性、急救止血與英文單字的互動學習網頁設計規劃。">
+  <meta name="description" content="家園救援任務：防災探索隊六個互動任務的設計規劃，涵蓋防災背包、地震、火災、颱風淹水、防空警報與家人失散。">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -13,42 +13,53 @@
     <nav aria-label="網站導覽"><ul class="nav">
       <li><a href="index.html">首頁</a></li>
       <li><a href="positioning.html">1 定位與界線</a></li>
-      <li><a href="gameplay.html">2 遊戲流程與任務</a></li>
+      <li><a href="gameplay.html">2 六個任務</a></li>
       <li><a href="english.html">3 英文與發音</a></li>
       <li><a href="child-idea.html">4 孩子的建議</a></li>
       <li><a href="parents-tech.html" aria-current="page">5 家長引導與技術</a></li>
-      <li><a href="decisions.html">6 決策與下一步</a></li>
+      <li><a href="sources.html">6 教材來源</a></li>
+      <li><a href="decisions.html">7 決策與下一步</a></li>
       <li><a href="game/index.html" class="nav-game">▶ 互動任務</a></li>
     </ul></nav>
   </div></header>
   <main>
 <h1>家長引導與技術</h1>
-<p class="lead">家長是陪玩的引導者；網頁是離線、不存資料的單純網頁。</p>
+<p class="lead">家長是陪玩的引導者；網頁是離線、不上傳資料的單純網頁。</p>
 
 <h2>每關的家長小卡</h2>
 <p>每關有一張可以收合的小卡，內容包括：</p>
 <ol class="steps">
-  <li><strong>這關在學什麼</strong>：一句話說明學習重點。</li>
-  <li><strong>可以問孩子的一句話</strong>：例如「為什麼要先看地上有沒有玻璃？」</li>
+  <li><strong>這關在學什麼</strong>：一句話說明學習重點與依據。</li>
+  <li><strong>可以問孩子的一句話</strong>：例如「為什麼搖晃時不能衝向樓梯？」</li>
   <li><strong>孩子卡住時怎麼提示</strong>：先給線索，不直接說答案。</li>
-  <li><strong>真實生活的延伸</strong>：例如一起固定家裡的高櫃、檢查防災包、實際走一次到集結點的路線。</li>
+  <li><strong>真實生活的延伸</strong>：固定高櫃、檢查防災包、走一次集結點路線。</li>
 </ol>
+
+<h2>家長陪同模式與進階單元</h2>
+<ul>
+  <li>止血帶（原第 9 關，目前隱藏）的設計：預設標示「建議家長或老師陪同」，開始前要勾選陪同、出血量條預設關閉，先教確認安全、求救與直接加壓，最後一題說明「虛擬模擬不等於具備正式救護能力」。這些程式與資料仍保留。</li>
+</ul>
+
+<h2>設定</h2>
+<p>提示音效、語音朗讀、降低動畫（也會跟隨系統的「減少動態」設定）。警報不使用音效，也沒有閃爍畫面；操作不計時，不會因為慢而失敗。</p>
 
 <h2>技術規劃</h2>
 <div class="table-wrap"><table>
   <tr><th>項目</th><th>做法</th></tr>
   <tr><td>頁面</td><td>獨立頁面，不放進原本的作文工具</td></tr>
-  <tr><td>技術</td><td>只用 HTML、CSS、原生 JavaScript；不用框架、不裝套件、不載入外部資源</td></tr>
-  <tr><td>資料</td><td>任務、裝備、單字放在獨立的資料檔，雙擊就能離線開啟</td></tr>
-  <tr><td>隱私</td><td>不儲存任何資料、不蒐集個資、不使用麥克風</td></tr>
-  <tr><td>圖像</td><td>用 CSS 與向量圖繪製，不使用外部圖檔</td></tr>
-  <tr><td>測試</td><td>檢查資料完整：每件裝備都有英文與音節、每關都有家長小卡</td></tr>
+  <tr><td>技術</td><td>只用 HTML、CSS、原生 JavaScript；不用框架、不裝套件、不載入外部資源（補充影片只是連結，點了才開新分頁）</td></tr>
+  <tr><td>資料</td><td>關卡、物品、單字、來源都放在 <code>game/data.js</code>，每關有穩定 ID（顯示：p2、m1、f1、w1、a1、p3、p1；隱藏：s1、b1、m2），重排或隱藏不影響進度；場景插圖在 <code>game/scenes.js</code></td></tr>
+  <tr><td>隱私與儲存</td><td>本機只存設定、關卡完成、防災包選擇、單字與檢查表勾選；不存姓名、住址、電話，不上傳；列印的聯絡卡由家長手寫。設定頁可清除所有本機紀錄</td></tr>
+  <tr><td>圖像</td><td>全部是內建向量圖，沒有外部圖檔</td></tr>
+  <tr><td>無障礙</td><td>手機優先（320 到 1200 像素無水平溢出）、按鈕至少 44 像素、鍵盤可操作、不只靠顏色表示對錯、動畫與音效可關閉</td></tr>
+  <tr><td>自動測試</td><td><code>node tests/check.js</code>：1152 項資料與兒童防災安全規則檢查（例如搖晃時衝樓梯、火災搭電梯或躲浴室、涉水、跟陌生人走都不可判為正確；隱藏關卡的規則仍保留檢查）。<code>tests/e2e.html</code>：在瀏覽器真的點完六關的對與錯、重玩、缺裝備、單字庫、家庭檢查表、防災關鍵卡、各種螢幕寬度，共 364 項，並檢查沒有 JavaScript 錯誤</td></tr>
 </table></div>
+<p class="note">尚未驗證：列印預覽的實際外觀、真實手機與平板操作、各瀏覽器的英文語音與提示音、螢幕閱讀器。</p>
 <nav class="pager" aria-label="上下頁">
   <span><a href="child-idea.html">← 4 孩子的建議</a></span>
-  <span><a href="decisions.html">6 決策與下一步 →</a></span>
+  <span><a href="sources.html">6 教材來源 →</a></span>
 </nav>
   </main>
-  <footer>設計草案，急救內容尚未經官方核對，不可作為急救教學。本專案為原創設計，與任何遊戲公司無關。</footer>
+  <footer>防災教育模擬，不是正式救護訓練；內容整理自公開資料，未獲任何機關認證。原創設計，與任何遊戲公司無關。</footer>
 </body>
 </html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>E2E 測試</title>
+  <style>
+    body { font: 15px/1.5 "Microsoft JhengHei", sans-serif; margin: 16px; background: #fff; color: #111; }
+    .p { color: #087f3b; } .f { color: #b3261e; font-weight: bold; }
+    #frames { position: absolute; left: -99999px; top: 0; }
+  </style>
+</head>
+<body>
+  <h1>家園救援任務：瀏覽器操作測試</h1>
+  <p id="status">執行中…（需用 http 伺服器開啟，不能用 file://）</p>
+  <ul id="out"></ul>
+  <div id="frames"></div>
+  <script src="e2e.js"></script>
+  <script>
+    runE2E().then(R => {
+      const bad = R.filter(r => !r.ok);
+      document.getElementById('status').textContent = `完成：${R.length - bad.length} 項通過，${bad.length} 項失敗`;
+      document.getElementById('out').innerHTML = bad.map(r => `<li class="f">✗ ${r.n}　${r.d}</li>`).join('') || '<li class="p">全部通過</li>';
+      window.__E2E = { total: R.length, failed: bad.length, bad };
+      document.title = `E2E-DONE ${R.length - bad.length}/${R.length}`;
+    }).catch(e => {
+      document.getElementById('status').textContent = '測試程式錯誤：' + e.message;
+      window.__E2E = { error: e.stack || e.message };
+      document.title = 'E2E-ERROR';
+    });
+  </script>
+</body>
+</html>

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>家園救援任務｜互動任務</title>
-  <meta name="description" content="家園救援任務：平日整備居家防災、防災包與家庭集結點，並演習地震防護與戰時止血帶，同時學英文單字。">
+  <meta name="description" content="家園救援任務：防災探索隊九個互動任務，學地震、火災、淹水、防空警報、與家人失散、簡易包紮與止血帶認識，並學英文單字、集徽章。">
   <link rel="stylesheet" href="game.css">
 </head>
 <body>
@@ -13,16 +13,20 @@
       <span class="g-brand">家園救援任務<small>OPERATION HOME GUARD</small></span>
       <nav class="g-nav" aria-label="任務選單">
         <button type="button" data-go="hub">演習基地</button>
+        <button type="button" data-go="stamps">集點卡</button>
         <button type="button" data-go="vocab">單字庫</button>
-        <button type="button" data-go="card">防災卡</button>
-        <a href="../index.html">設計說明</a>
+        <button type="button" data-go="family">家庭練習</button>
+        <button type="button" data-go="card">關鍵卡</button>
+        <button type="button" data-go="sources">教材來源</button>
+        <!-- 設計說明網站的連結先隱藏（給孩子玩的畫面不放）；需要時可改回 <a href="../index.html">設計說明</a> -->
       </nav>
     </div>
   </header>
   <main id="app" class="g-main"></main>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <footer class="g-footer">設計草案原型：急救與防災步驟尚未與官方資料核對，不能取代實體急救課程。網頁不儲存任何資料，重新整理就會清空。原創設計，與任何遊戲公司無關。</footer>
+  <footer class="g-footer">防災教育模擬，不是正式救護訓練，也不能取代實體急救課程；內容整理自公開資料，未獲任何機關認證（見「教材來源」）。本機只儲存勾選與關卡進度，不儲存姓名、住址或電話，也不上傳。原創設計，與任何遊戲公司無關。</footer>
   <script src="data.js"></script>
+  <script src="scenes.js"></script>
   <script src="game.js"></script>
 </body>
 </html>

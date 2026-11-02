@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>遊戲流程與任務｜家園救援任務 設計規劃</title>
-  <meta name="description" content="家園救援任務：以戰術任務風格帶孩子學居家韌性、急救止血與英文單字的互動學習網頁設計規劃。">
+  <title>六個任務與遊戲流程｜家園救援任務 設計規劃</title>
+  <meta name="description" content="家園救援任務：防災探索隊六個互動任務的設計規劃，涵蓋防災背包、地震、火災、颱風淹水、防空警報與家人失散。">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -13,118 +13,124 @@
     <nav aria-label="網站導覽"><ul class="nav">
       <li><a href="index.html">首頁</a></li>
       <li><a href="positioning.html">1 定位與界線</a></li>
-      <li><a href="gameplay.html" aria-current="page">2 遊戲流程與任務</a></li>
+      <li><a href="gameplay.html" aria-current="page">2 六個任務</a></li>
       <li><a href="english.html">3 英文與發音</a></li>
       <li><a href="child-idea.html">4 孩子的建議</a></li>
       <li><a href="parents-tech.html">5 家長引導與技術</a></li>
-      <li><a href="decisions.html">6 決策與下一步</a></li>
+      <li><a href="sources.html">6 教材來源</a></li>
+      <li><a href="decisions.html">7 決策與下一步</a></li>
       <li><a href="game/index.html" class="nav-game">▶ 互動任務</a></li>
     </ul></nav>
   </div></header>
   <main>
-<h1>遊戲流程與任務</h1>
-<p class="lead">孩子用第一人稱扮演救援隊員：平日先整備，再進行重大災難演習。每一步都由自己選擇「我要做什麼」。</p>
+<h1>六個任務與遊戲流程</h1>
+<p class="lead">孩子用第一人稱扮演防災探索隊員。每個任務：情境介紹 → 觀察現場 → 選擇行動 → 隊長說明 → 重選或下一步 → 完成 → 覆盤。答錯不扣分、不結束任務。</p>
 
 <h2>整體流程</h2>
-<ol class="timeline"><li><span>居家安全檢查</span></li><li><span>防災包整備</span></li><li><span>家庭集結點</span></li><li><span>演習：地震防護</span></li><li><span>演習：戰時受傷止血</span></li><li><span>我們家的防災卡</span></li></ol>
+<ol class="timeline"><li><span>任務簡報（含場景插圖與安全提醒）</span></li><li><span>觀察現場、選擇行動</span></li><li><span>隊長說明；答錯可重選</span></li><li><span>完成並解鎖英文句型</span></li><li><span>覆盤七段</span></li><li><span>蓋徽章章</span></li></ol>
 
-<h2>第一人稱畫面</h2>
+<h2>統一的任務介面</h2>
 <ul>
-  <li>像戴著頭盔看出去：上方是任務目標與時間，左下是背包欄位，右下是無線電對話框。</li>
-  <li>場景用網頁內建的 CSS 與向量圖畫（房間、小鎮地圖、腿部示意），不需要外部圖檔。</li>
-  <li>互動方式：在房間裡找危險、在地圖上選集結點、選擇行動、點選止血帶位置、按住轉動絞棒。</li>
+  <li><strong>每一步都有場景插圖</strong>（教室、走廊、淹水街道、小鎮、人群…），隨步驟改變，例如走廊濃煙、拿出手電筒後房間亮起。</li>
+  <li>任務名稱、「STEP n / 共幾步」進度條、「模擬演練」標示、背包內容、隊長無線電、安全提醒。</li>
+  <li><strong>「需要提示」</strong>：選擇題會淡化一個比較危險的選項並給一句線索；找危險的畫面會標出可點的地方。</li>
+  <li><strong>可點的地方會有「?」記號</strong>，點到後顯示名稱與說明；點選結果有「✓ 做對了！」與柔和提示音，答錯有說明並可再選。</li>
+  <li>以顏色以外的方式表示對錯（✓／✗ 符號與文字）；按鈕至少 44 像素；支援鍵盤。</li>
 </ul>
 
-<h2>平日整備與演習</h2>
-<p>範圍收斂為 3 個平日整備站和 2 個重大災難演習。演習會用到整備時準備的防災包和集結點：例如地震後要帶防災包走樓梯、走散時到集結點會合。</p>
+<h2>六個任務</h2>
 <section class="mission">
-  <header><span class="m-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><circle cx="12" cy="14" r="3"/><path d="M14.2 16.2L17 19"/></svg></span>
-    <div><span class="code">PREP-01</span><h3>居家安全檢查</h3></div></header>
-  <p>災難發生前，家就是你的基地。先巡一遍家裡，找出地震時可能傷人、或擋住逃生的地方。</p>
-  <ol class="timeline"><li><span>巡視家裡</span></li><li><span>找出危險的地方</span></li><li><span>想好怎麼改善</span></li><li><span>確認開關與滅火器位置</span></li></ol>
-  <p class="words"><span class="note">新單字：</span><span class="tag en">fire extinguisher</span></p>
+  <header><span class="m-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6V4h8v2"/><rect x="4" y="6" width="16" height="15" rx="3"/><path d="M8 13h8M12 10v6"/></svg></span><div><span class="code">第 1 關</span><h3>基地整備：我的防災背包</h3></div></header>
+  <p>大災難發生時，可能要馬上離開家，道路和通訊也可能中斷。防災包要平常就準備好，拿了就能走。先整理背包，再學幾個重要的求助知識。</p>
+  <ol class="timeline"><li><span>選一個雙肩背包</span></li><li><span>依四大類挑物品</span></li><li><span>檢查必備物品</span></li><li><span>認識 119 與 110</span></li><li><span>寫好家長聯絡方式</span></li><li><span>穿好走路的鞋</span></li></ol>
+  <p><strong>口訣：</strong>平常先準備，災時才不慌。　<strong>徽章：</strong><span class="tag">整備官</span></p>
+  <p class="words"><span class="note">英文單字：</span><span class="tag en">backpack</span> <span class="tag en">water</span> <span class="tag en">flashlight</span> <span class="tag en">whistle</span> <span class="tag en">first aid</span> <span class="tag en">emergency</span> <span class="tag en">family</span> <span class="tag en">shoes</span>　<span class="note">解鎖句：</span><span class="tag en">Be ready.</span></p>
+  <p class="note"><strong>如果真的發生：</strong>如果現在要馬上離開家，你的防災包放在哪裡？爸媽的電話寫在哪裡？<br><strong>和家人一起練習：</strong>這個週末和家人一起打開防災包檢查：水和食物有沒有過期、電池有沒有電，並請家長寫一張緊急聯絡卡放進去。</p>
 </section>
 <section class="mission">
-  <header><span class="m-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6V4h8v2"/><rect x="4" y="6" width="16" height="15" rx="3"/><path d="M8 13h8M12 10v6"/></svg></span>
-    <div><span class="code">PREP-02</span><h3>防災包整備</h3></div></header>
-  <p>大災難發生時，可能要馬上離開家，道路和通訊也可能中斷。防災包要平常就準備好，至少能撐 3 天，拿了就能走。</p>
-  <ol class="timeline"><li><span>選一個雙肩背包</span></li><li><span>依四大類挑物品</span></li><li><span>檢查必備物品</span></li><li><span>放在全家都知道的地方</span></li><li><span>定期檢查效期</span></li></ol>
-  <p class="words"><span class="note">新單字：</span><span class="tag en">go bag</span></p>
+  <header><span class="m-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M12 9l-2 4 3 2-2 4"/></svg></span><div><span class="code">第 2 關</span><h3>地震：趴下、掩護、穩住</h3></div></header>
+  <p>模擬演練：你在教室上課，突然發生大地震，地面劇烈搖晃，櫃子上的東西開始晃動！老師在教室前面。</p>
+  <ol class="timeline"><li><span>趴下、掩護、穩住</span></li><li><span>搖晃時不亂跑</span></li><li><span>搖晃停止後聽老師指示</span></li><li><span>走樓梯、不搭電梯</span></li><li><span>到集合地點報到</span></li></ol>
+  <p><strong>口訣：</strong>地震來了先趴下，掩護頭頸要穩住。　<strong>徽章：</strong><span class="tag">穩如磐石</span></p>
+  <p class="words"><span class="note">英文單字：</span><span class="tag en">earthquake</span> <span class="tag en">drop</span> <span class="tag en">cover</span> <span class="tag en">hold</span> <span class="tag en">helmet</span> <span class="tag en">stairs</span> <span class="tag en">safe</span>　<span class="note">解鎖句：</span><span class="tag en">Drop, cover, and hold on!</span></p>
+  <p class="note"><strong>如果真的發生：</strong>如果你現在在教室，最近的堅固桌子在哪裡？搖晃停止後，你要聽誰的指示？<br><strong>和家人一起練習：</strong>在家玩「地震來了」：大人喊地震，全家 10 秒內趴下、躲到桌下，抓住桌腳，等大人說停再起來。</p>
 </section>
 <section class="mission">
-  <header><span class="m-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
-    <div><span class="code">PREP-03</span><h3>家庭集結點</h3></div></header>
-  <p>大災難時，家人可能在不同地方，電話也可能打不通。平常就要約好在哪裡會合。</p>
-  <ol class="timeline"><li><span>選第一集結點（家附近）</span></li><li><span>選第二集結點（較遠）</span></li><li><span>約好聯絡方式</span></li><li><span>走散時到集結點等</span></li></ol>
-  <p class="words"><span class="note">新單字：</span><span class="tag en">meeting point</span></p>
+  <header><span class="m-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c1 4-3 5-3 9a4 4 0 0 0 8 0c0-2-1-3-2-4 0 2-1 3-2 3 1-3-1-5-1-8z"/><path d="M5 21h14"/></svg></span><div><span class="code">第 3 關</span><h3>火災：找到安全逃生路線</h3></div></header>
+  <p>模擬演練：學校走廊的火警鈴響了！你要找出安全的逃生路線。先看看走廊的狀況，再選擇這次要練習哪一種情況。</p>
+  <ol class="timeline"><li><span>觀察走廊</span></li><li><span>有路：走安全樓梯</span></li><li><span>不搭電梯、不回頭拿東西</span></li><li><span>安全時隨手關門</span></li><li><span>路被濃煙擋住：關門求救</span></li><li><span>通報 119 並說明位置</span></li></ol>
+  <p><strong>口訣：</strong>有路快逃生，濃煙擋路要關門求救。　<strong>徽章：</strong><span class="tag">逃生領航員</span></p>
+  <p class="words"><span class="note">英文單字：</span><span class="tag en">fire</span> <span class="tag en">smoke</span> <span class="tag en">exit</span> <span class="tag en">stairs</span> <span class="tag en">call</span> <span class="tag en">help</span> <span class="tag en">safe</span>　<span class="note">解鎖句：</span><span class="tag en">Fire! Get out!</span></p>
+  <p class="note"><strong>如果真的發生：</strong>如果學校的火警鈴響了，你知道最近的安全出口嗎？如果被濃煙擋住，你會去哪裡？<br><strong>和家人一起練習：</strong>和家人一起畫家裡的逃生路線圖，找出兩條出口；並約好建築物外面的集合地點。</p>
 </section>
 <section class="mission">
-  <header><span class="m-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M12 9l-2 4 3 2-2 4"/></svg></span>
-    <div><span class="code">DRILL-01</span><h3>地震防護因應</h3></div></header>
-  <p>演習情境：你在客廳寫功課，突然發生大地震，地面劇烈搖晃，櫃子上的東西開始掉下來！</p>
-  <ol class="timeline"><li><span>趴下、掩護、穩住</span></li><li><span>搖完先穿鞋</span></li><li><span>注意瓦斯</span></li><li><span>帶防災包走樓梯</span></li><li><span>到集結點會合</span></li></ol>
-  <p class="words"><span class="note">新單字：</span><span class="tag en">earthquake</span> <span class="tag en">drop</span> <span class="tag en">cover</span> <span class="tag en">hold on</span> <span class="tag en">stairs</span></p>
+  <header><span class="m-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 15c3-3 6 3 9 0s6 3 9 0"/><path d="M3 20c3-3 6 3 9 0s6 3 9 0"/><path d="M8 4l-2 5h4l-2 5"/></svg></span><div><span class="code">第 4 關</span><h3>颱風與淹水：危險的積水路段</h3></div></header>
+  <p>模擬演練：颱風過後，社區的路面積水了。你要判斷哪裡危險，選擇安全的路線和做法。</p>
+  <ol class="timeline"><li><span>颱風警報：在家不外出</span></li><li><span>找出危險的地方</span></li><li><span>回家的路淹水：留在安全處</span></li><li><span>不碰掉落電線</span></li><li><span>接到撤離通知時配合</span></li></ol>
+  <p><strong>口訣：</strong>積水不亂走，避開危險找大人。　<strong>徽章：</strong><span class="tag">安全路線員</span></p>
+  <p class="words"><span class="note">英文單字：</span><span class="tag en">flood</span> <span class="tag en">water</span> <span class="tag en">warning</span> <span class="tag en">safe</span> <span class="tag en">shelter</span> <span class="tag en">emergency</span>　<span class="note">解鎖句：</span><span class="tag en">Stay away.</span></p>
+  <p class="note"><strong>如果真的發生：</strong>如果放學的路淹水了，你會先去哪裡？要聯絡誰？<br><strong>和家人一起練習：</strong>和家人查家附近的避難收容處所位置，並約好颱風天誰負責收聽官方消息。</p>
 </section>
 <section class="mission">
-  <header><span class="m-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 2v20M16 2v20"/><rect x="5" y="9" width="14" height="4" rx="1"/><path d="M12 5v12"/></svg></span>
-    <div><span class="code">DRILL-02</span><h3>戰時受傷止血</h3></div></header>
-  <p>演習情境：防空警報響起，你和家人前往避難處所途中，家人的大腿被掉落的碎片劃傷，血一直湧出來，用力壓也壓不住。戰時救護車可能無法馬上趕到。</p>
-  <ol class="timeline"><li><span>先到安全的地方</span></li><li><span>判斷：壓不住才用</span></li><li><span>綁在傷口上方</span></li><li><span>轉絞棒到不流血</span></li><li><span>固定、寫時間</span></li><li><span>不鬆開，通報救護</span></li></ol>
-  <p class="words"><span class="note">新單字：</span><span class="tag en">siren</span> <span class="tag en">shelter</span> <span class="tag en">bleeding</span> <span class="tag en">tourniquet</span> <span class="tag en">tighten</span> <span class="tag en">twist</span> <span class="tag en">lock</span></p>
+  <header><span class="m-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18v-6a5 5 0 0 1 10 0v6"/><path d="M5 18h14v3H5z"/><path d="M12 2v2M4 6l1.5 1.5M20 6l-1.5 1.5"/></svg></span><div><span class="code">第 5 關</span><h3>防空警報：尋找安全掩蔽處</h3></div></header>
+  <p>模擬演練（只是練習，沒有真的警報）：學校廣播說「這是防空演練」。依照你所在的位置，選擇適合的掩蔽方式。</p>
+  <ol class="timeline"><li><span>認識防空警報</span></li><li><span>保持冷靜、拿起防災包</span></li><li><span>依位置選擇掩蔽處</span></li><li><span>保持避難姿勢</span></li><li><span>聽到解除聲才解除</span></li></ol>
+  <p><strong>口訣：</strong>聽到警報先掩蔽，遠離窗戶聽指示。　<strong>徽章：</strong><span class="tag">掩蔽小隊長</span></p>
+  <p class="words"><span class="note">英文單字：</span><span class="tag en">siren</span> <span class="tag en">warning</span> <span class="tag en">shelter</span> <span class="tag en">cover</span> <span class="tag en">safe</span>　<span class="note">解鎖句：</span><span class="tag en">Take cover.</span></p>
+  <p class="note"><strong>如果真的發生：</strong>如果現在聽到警報，你在學校會去哪裡？在家會去哪個房間？<br><strong>和家人一起練習：</strong>和家人在地圖上找家附近的防空避難處所，並實際走一次路線，約好家裡離窗戶最遠的房間。</p>
+</section>
+<section class="mission">
+  <header><span class="m-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span><div><span class="code">第 6 關</span><h3>與家人失散：我會正確求救</h3></div></header>
+  <p>避難的路上，人很多，你暫時找不到爸爸媽媽了。平常先約好集結點，再學會說清楚自己的需要。</p>
+  <ol class="timeline"><li><span>選第一集結點（家附近）</span></li><li><span>選第二集結點（較遠）</span></li><li><span>約好聯絡方式</span></li><li><span>留在安全處，找可靠的大人</span></li><li><span>不跟不明人士走</span></li><li><span>說出我是誰、在哪、發生什麼事</span></li></ol>
+  <p><strong>口訣：</strong>找不到家人不亂跑，找可靠的大人來幫忙。　<strong>徽章：</strong><span class="tag">集結指揮官</span></p>
+  <p class="words"><span class="note">英文單字：</span><span class="tag en">meeting point</span> <span class="tag en">family</span> <span class="tag en">help</span> <span class="tag en">call</span> <span class="tag en">police</span> <span class="tag en">emergency</span>　<span class="note">解鎖句：</span><span class="tag en">I need help.</span></p>
+  <p class="note"><strong>如果真的發生：</strong>如果和爸媽走散了，你會先找誰？你能完整說出你是誰、在哪、需要什麼幫忙嗎？<br><strong>和家人一起練習：</strong>週末全家實際走一次到集結點的路線，約好一位外地聯絡人，並練習用四句話求救。</p>
 </section>
 <p><a class="cta" href="game/index.html">開始互動任務</a></p>
 
-<h2>緊急避難包清單 <span class="tag">已參考來源整理</span></h2>
-<p>依臺北市政府消防局〈緊急避難包〉的四大類整理，並參考黑熊學院的極簡準備指南。遊戲中防災包有 14 格，孩子要先放「必備」，再用剩下的空間加帶「建議」物品；也有遊戲機、整箱泡麵等干擾物品，選了不扣分，檢查時再說明。</p>
+<h2>每關覆盤的七段結構</h2>
+<ol class="timeline"><li><span>本關學會了什麼（三個重點）</span></li><li><span>遊戲 vs 現實（翻卡）</span></li><li><span>如果真的發生（一個生活中可用的問題）</span></li><li><span>和家人一起練習（一項在家行動）</span></li><li><span>我的裝備（缺少時的替代做法）</span></li><li><span>反思三問</span></li><li><span>完成徽章（蓋章、可重玩）</span></li></ol>
+<p>每關有不同的英文解鎖句與口訣，不會每關都用同一句；英文只是輔助記憶，不能取代實際的安全行動。</p>
+
+<h2>徽章集點卡</h2>
+<p>六關各一格，完成就蓋章（演習基地頂端有迷你版，另有完整集點卡可列印）。集滿 6 枚成為防災探索隊員；章不會因重玩而消失。不排名、不比分數。</p>
+
+<h2>防災包（14 格）</h2>
+<p>依<a href="sources.html">臺灣全民安全指引與臺北市消防局</a>的清單分四大類，孩子要在 14 格內取捨：「優先」物品先放，再用剩下的空間加帶「建議」物品。<strong>沒有唯一正確的組合</strong>：缺少某樣物品不判定失敗，任務中改教替代做法，覆盤再提醒。能量點心是建議物品，不是錯誤物品；遊戲機、大型玩偶、整箱泡麵等是干擾物品，只在檢查時說明原因。</p>
 <div class="table-wrap"><table>
   <tr><th>類別</th><th>物品與用途</th></tr>
-  <tr><td>水和食物</td><td><span class="tag ">必備</span><strong>飲用水</strong>：至少 2 瓶（每瓶約 600 毫升）；可再加輕的水壺。<br><span class="tag ">必備</span><strong>不用煮的主食</strong>：提供飽足感，例如罐頭、即食飯、米餅、口糧餅乾。<br><span class="tag draft">建議</span><strong>能量點心</strong>：快速補充熱量，例如營養棒、堅果、巧克力、糖果；喜歡的小零食也能安定心情。</td></tr>
-  <tr><td>衛生用品</td><td><span class="tag ">必備</span><strong>外傷藥膏與包紮用品</strong>：處理擦傷、割傷的基本包紮用品。<br><span class="tag ">必備</span><strong>常用藥物與處方藥</strong>：家人每天要吃的處方藥，以及止痛、止瀉、過敏、感冒等常備藥。<br><span class="tag draft">建議</span><strong>口罩</strong>：避免吸入灰塵、煙霧，也能防疫。<br><span class="tag draft">建議</span><strong>衛生紙與濕紙巾</strong>：衛生紙、消毒濕紙巾或酒精，保持清潔；也可帶小條毛巾、生理用品（如有需要）。</td></tr>
-  <tr><td>生活防災用品</td><td><span class="tag ">必備</span><strong>手電筒或頭燈</strong>：停電、夜間照明；頭燈可以空出雙手。<br><span class="tag ">必備</span><strong>備用電池</strong>：手電筒、收音機的電力。<br><span class="tag ">必備</span><strong>哨子</strong>：受困時吹哨求救，比大喊省力、傳得遠。<br><span class="tag ">必備</span><strong>可攜式收音機</strong>：停電、網路斷線時收聽官方消息；手搖發電款更不怕沒電。<br><span class="tag ">必備</span><strong>輕便雨衣與外套</strong>：防風防雨、保暖；機車雨衣也可以。<br><span class="tag ">必備</span><strong>紙本地圖與聯絡資訊</strong>：寫下家人電話、集結點和路線；手機沒電也看得到。<br><span class="tag ">必備</span><strong>身分證、健保卡、存摺</strong>：證明身分、就醫、領錢；用夾鏈袋防水。<br><span class="tag draft">建議</span><strong>充飽的行動電源</strong>：幫手機充電，才能聯絡家人。<br><span class="tag draft">建議</span><strong>保暖毯或小型睡袋</strong>：晚上保暖，避免失溫。<br><span class="tag draft">建議</span><strong>工作手套</strong>：防切割、耐磨，清理碎玻璃或雜物時保護雙手。<br><span class="tag draft">建議</span><strong>紙筆</strong>：抄電話、留字條，也能寫下綁止血帶的時間。<br><span class="tag draft">建議</span><strong>夾鏈袋</strong>：幫證件、藥品防水，也能把物品分類。</td></tr>
+  <tr><td>水和食物</td><td><span class="tag ">優先</span><strong>飲用水</strong>：至少 2 瓶（每瓶約 600 毫升）；可再加輕的水壺。<br><span class="tag ">優先</span><strong>不用煮的主食</strong>：提供飽足感，例如罐頭、即食飯、米餅、口糧餅乾。<br><span class="tag draft">建議</span><strong>能量點心</strong>：快速補充熱量，例如營養棒、堅果、巧克力、糖果；喜歡的小零食也能安定心情。</td></tr>
+  <tr><td>衛生用品</td><td><span class="tag ">優先</span><strong>外傷藥膏與包紮用品</strong>：處理擦傷、割傷的基本包紮用品（紗布、繃帶）。<br><span class="tag ">優先</span><strong>常用藥物與處方藥</strong>：家人每天要吃的處方藥，由家長準備；也可備止痛、止瀉、過敏、感冒等常備藥。<br><span class="tag draft">建議</span><strong>口罩</strong>：避免吸入灰塵、煙霧，也能防疫。<br><span class="tag draft">建議</span><strong>衛生紙與濕紙巾</strong>：衛生紙、消毒濕紙巾或酒精，保持清潔；也可帶小條毛巾、生理用品（如有需要）。</td></tr>
+  <tr><td>生活防災用品</td><td><span class="tag ">優先</span><strong>手電筒或頭燈</strong>：停電、夜間照明；頭燈可以空出雙手。<br><span class="tag ">優先</span><strong>備用電池</strong>：手電筒、收音機的電力。<br><span class="tag ">優先</span><strong>哨子</strong>：受困或走散時吹哨求救，比大喊省力、傳得遠。<br><span class="tag ">優先</span><strong>可攜式收音機</strong>：停電、網路斷線時收聽官方消息；手搖發電款更不怕沒電。<br><span class="tag ">優先</span><strong>輕便雨衣與外套</strong>：防風防雨、保暖；機車雨衣也可以。<br><span class="tag ">優先</span><strong>緊急聯絡卡與避難地圖</strong>：紙本寫下家長電話、集結點和路線；手機沒電也看得到，內容由家長協助填寫。<br><span class="tag ">優先</span><strong>身分證、健保卡、存摺（影本）</strong>：證明身分、就醫、領錢；紙本用防水夾鏈袋裝好，由家長準備。<br><span class="tag draft">建議</span><strong>少量現金</strong>：停電時無法刷卡，準備少量零錢和小鈔，由家長保管。<br><span class="tag draft">建議</span><strong>充飽的行動電源</strong>：幫手機充電，才能聯絡家人。<br><span class="tag draft">建議</span><strong>保暖毯或小型睡袋</strong>：晚上保暖，避免失溫；鋁箔毯小體積不佔空間。<br><span class="tag draft">建議</span><strong>手套</strong>：工作手套防切割、耐磨；協助處理傷口前戴上，避免直接碰到血。<br><span class="tag draft">建議</span><strong>頭盔或防災頭套</strong>：保護頭部，建議掛在防災包外面，地震時馬上能戴。<br><span class="tag draft">建議</span><strong>輕便耐走的鞋</strong>：避難要走很遠；出門時穿安全、方便行走的鞋，不穿拖鞋。<br><span class="tag draft">建議</span><strong>紙筆</strong>：抄電話、留字條，也能記下重要的時間和事情。<br><span class="tag draft">建議</span><strong>夾鏈袋</strong>：幫證件、藥品防水，也能把物品分類。</td></tr>
   <tr><td>照護用品</td><td><span class="tag draft">建議</span><strong>家人照護用品</strong>：依家人需要準備：嬰兒奶粉尿布、寵物食品與牽繩、長輩的假牙清潔劑或助聽器電池等。</td></tr>
-  <tr><td>本遊戲另加</td><td><span class="tag draft">建議</span><strong>止血帶</strong>：手或腳大量出血、壓不住時使用；要先受過訓練（演習二會用到）。</td></tr>
+  <tr><td>其他</td><td><span class="tag draft">建議</span><strong>止血帶（需受過訓練）</strong>：手或腳大量出血、壓不住時由受過訓練的大人使用；放不放由家長決定（任務 9 會認識）。<br><span class="tag">干擾物品</span><strong>遊戲機</strong>：好玩，但停電時沒辦法充電，也不能救命。一點點娛樂可以，但別佔掉救命物品的位置。<br><span class="tag">干擾物品</span><strong>大型玩偶</strong>：抱著安心，但又大又佔空間；可以選一個小小的安心物就好。<br><span class="tag">干擾物品</span><strong>一整箱泡麵</strong>：要熱水和開火才能吃，又很佔空間；選不用煮的主食比較好。<br><span class="tag">干擾物品</span><strong>一大疊漫畫</strong>：很重又佔空間，防災包要留給救命的東西。</td></tr>
 </table></div>
 <div class="grid">
-  <div class="card"><strong>放在哪裡</strong>✓ 家門口附近<br>✓ 容易拿取的位置<br>✓ 全家人都知道的地方<br>✓ 也可以放在地震時會躲的桌子下<br>✗ 不要放在難以拿取的地方（例如櫃子最深處）</div>
-  <div class="card"><strong>背包怎麼選</strong>用雙肩背包，空出雙手逃生<br>先用家裡舊背包就好，先求有再求好<br>避免戰術風格或迷彩背包，可能被誤認為民兵<br>準備亮色防水背包套，需要求救時比較容易被看見<br>原則上要能維持 3 天的基本需求，定期檢查效期並更換</div>
+  <div class="card"><strong>放在哪裡</strong>✓ 家門口附近（玄關）<br>✓ 容易拿取的位置<br>✓ 全家人都知道的地方<br>✓ 也可以在臥室床邊、地震時會躲的桌子下，多放一個輕量版<br>✗ 不要放在難以拿取的地方（例如櫃子最深處）</div>
+  <div class="card"><strong>背包怎麼選與管理</strong>以個人為單位，準備至少 1 到 3 天份，以背得動為準，內容盡量簡便<br>用雙肩背包，空出雙手逃生；先用家裡舊背包就好，先求有再求好<br>標記物品有效日期，每半年檢查一次，快過期的先吃、壞了的換掉<br>避免戰術風格或迷彩背包，可能被誤認為民兵；亮色防水背包套比較容易被看見<br>出門時穿輕便耐走的鞋；處方藥、證件、現金等由家長協助準備</div>
 </div>
-<p class="note">「必備」與「建議」是本遊戲為孩子整理的優先順序，不是來源的分級；請依家人需要調整。來源：<a href="https://www.119.gov.taipei/News_Content.aspx?n=6B7505BEC5A0EB5A&sms=EAB67139FA937B7C&s=BCEF564D91D43444">臺北市政府消防局〈緊急避難包〉</a>、<a href="https://kuma-academy.org/article/32">黑熊學院〈先求有再求好，準備避難背包不用花大錢：極簡準備指南〉</a>。</p>
 
-<h2>家庭集結點</h2>
-<ol class="timeline"><li><span>第一集結點：家附近的空曠處</span></li><li><span>第二集結點：較遠、全家都認得</span></li><li><span>外地聯絡人：電話打不通傳簡訊或用 1991 留言</span></li><li><span>到了集結點就留下來等</span></li></ol>
-<p>集結點要空曠、上方不會有東西掉下來；騎樓下、加油站都不適合。最後的「我們家的防災卡」會把集結點、聯絡人和防災包清單整理成一張，列印後貼在家裡。網頁不儲存填寫的內容，電話號碼列印後手寫。</p>
-
-<h2>止血帶步驟 <span class="tag draft">草案，待官方核對</span></h2>
-<ol class="timeline vertical">
-  <li>綁在傷口上方約 5 到 8 公分，避開關節；不確定位置時，綁「高且緊」。</li>
-  <li>拉緊帶子，貼好魔鬼氈。</li>
-  <li>轉絞棒，直到不再流血。</li>
-  <li>固定絞棒。</li>
-  <li>記下綁上的時間。</li>
-  <li>不要自己鬆開，等待救護人員。</li>
-</ol>
-<p>完成後用無線電英文回報，例如 <span class="en">“Tourniquet on! Time 14:30.”</span></p>
-<div class="callout">緊急避難包已依上方來源整理；地震、居家防災與集結點的內容仍要以官方資料（例如內政部《台灣全民安全指引》、消防署、紅十字會）核對後才寫進網頁。</div>
-
-<h2>犯錯時怎麼回饋</h2>
+<h2>家庭防災練習</h2>
 <ul>
-  <li>不扣血、不出現失敗畫面；由「隊長」用無線電說明為什麼，再讓孩子重選。</li>
-  <li>出血量條只用來表現急迫感，可以關掉。</li>
-  <li>英文部分完全不計時。</li>
+  <li><strong>居家安全檢查</strong>（家庭練習，不計入六關）：在房間畫面找出 6 個地震時的危險，例如沒固定的高櫃、床頭的玻璃相框、堆滿雜物的門口。</li>
+  <li><strong>家庭防災檢查表</strong>（7 項，勾選存在本機、可重設）：安全出口、學校避難集合地點、家長電話、119 與 110 用途、集合方式、避難包位置、演練過地震避難。</li>
+  <li><strong>家庭緊急聯絡卡</strong>：空白範本列印後由家長手寫，網頁不輸入電話或地址。</li>
+  <li><strong>防災關鍵卡</strong>：六關各一組「孩子須知」（一句口訣加三個重點），固定內容、不用挑選；A4 預覽，含 119／110 與分項的「家庭防災小約定」：第一／第二集結點（會帶入遊戲中選的地點）、緊急聯絡人、聯絡電話、學校避難集合地點、避難包放哪裡、集合方式；電話與稱呼列印後手寫，網頁不輸入、不儲存。列印時只印卡片本身。</li>
 </ul>
 
-<h2>任務覆盤</h2>
-<ul>
-  <li>三個問題：做對了什麼？哪一步要再想想？在真實的家裡會怎麼做？</li>
-  <li>翻一張「遊戲 vs 現實」破解卡（見<a href="child-idea.html">孩子的建議</a>）。</li>
-  <li>授予徽章，例如「安全偵察員」「止血專家」；不排名、不比分數。</li>
-  <li>演習完成解鎖「Don’t worry, I’ve got you.」；平日整備完成解鎖「Be ready.」。</li>
-</ul>
+<h2>暫時隱藏的三關</h2>
+<p>孩子覺得九關有點多、太累，所以先維持六關，並<strong>移除「三、協助與急救」區塊</strong>：現場評估、簡易包紮、嚴重出血與止血帶三關不再出現在遊戲、集點卡、單字庫和防災關鍵卡。內容與測試資料都保留在 <code>game/data.js</code>（標記 <code>hidden</code>），日後想恢復只要拿掉標記。</p>
+<div class="table-wrap"><table>
+  <tr><th>關卡</th><th>內容</th></tr>
+  <tr><td>7. 現場評估：先確認安全</td><td>模擬演練：地震後，走廊上有人跌倒了。但地上有碎玻璃，旁邊好像還有掉落的電線。小朋友不是救援人員，先確認安全！</td></tr><tr><td>8. 簡易包紮：幫助受傷的人</td><td>模擬演練：確認現場安全了，大人在旁邊。你要判斷不同的出血狀況，在大人的協助下，做適合的處理。</td></tr><tr><td>9. 嚴重出血與止血帶（家長陪同）</td><td>進階認識單元，建議家長或老師陪同。模擬情境：事故中，家人的大腿被重物劃傷，血一直湧出來，用力壓也壓不住。</td></tr>
+</table></div>
+<p class="note">其中止血帶內容依全民安全指引：先撥 119、直接加壓、壓不住才用，綁在傷口上方 5 到 8 公分（高又緊）並記錄時間，頸頭胸腹不可用；補充影片連結仍列在<a href="sources.html">教材來源</a>。</p>
 <nav class="pager" aria-label="上下頁">
   <span><a href="positioning.html">← 1 定位與界線</a></span>
   <span><a href="english.html">3 英文與發音 →</a></span>
 </nav>
   </main>
-  <footer>設計草案，急救內容尚未經官方核對，不可作為急救教學。本專案為原創設計，與任何遊戲公司無關。</footer>
+  <footer>防災教育模擬，不是正式救護訓練；內容整理自公開資料，未獲任何機關認證。原創設計，與任何遊戲公司無關。</footer>
 </body>
 </html>

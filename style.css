@@ -162,3 +162,8 @@ footer { text-align: center; color: var(--gray); font-size: 14px; padding: 16px;
   .hero h1 { font-size: 26px; }
   .hero .emblem { max-width: 120px; order: -1; }
 }
+
+/* 核心理念流程 */
+.flow-big { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 12px 0 18px; }
+.flow-big span { background: var(--panel, #131a18); border: 1px solid var(--green-dim, #2a6b49); padding: 6px 14px; clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%); }
+.flow-big i { color: var(--green, #3ddc84); font-style: normal; }

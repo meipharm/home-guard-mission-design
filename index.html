@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>首頁｜家園救援任務 設計規劃</title>
-  <meta name="description" content="家園救援任務：以戰術任務風格帶孩子學居家韌性、急救止血與英文單字的互動學習網頁設計規劃。">
+  <meta name="description" content="家園救援任務：防災探索隊六個互動任務的設計規劃，涵蓋防災背包、地震、火災、颱風淹水、防空警報與家人失散。">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -13,24 +13,25 @@
     <nav aria-label="網站導覽"><ul class="nav">
       <li><a href="index.html" aria-current="page">首頁</a></li>
       <li><a href="positioning.html">1 定位與界線</a></li>
-      <li><a href="gameplay.html">2 遊戲流程與任務</a></li>
+      <li><a href="gameplay.html">2 六個任務</a></li>
       <li><a href="english.html">3 英文與發音</a></li>
       <li><a href="child-idea.html">4 孩子的建議</a></li>
       <li><a href="parents-tech.html">5 家長引導與技術</a></li>
-      <li><a href="decisions.html">6 決策與下一步</a></li>
+      <li><a href="sources.html">6 教材來源</a></li>
+      <li><a href="decisions.html">7 決策與下一步</a></li>
       <li><a href="game/index.html" class="nav-game">▶ 互動任務</a></li>
     </ul></nav>
   </div></header>
   <main>
 <section class="hero">
   <div>
-    <p class="eyebrow">MISSION BRIEFING // 設計規劃整理</p>
-    <h1><span class="nowrap">先做到，才能說</span><br><span class="nowrap">「別擔心，我來了」</span></h1>
-    <p class="lead">孩子喜歡戰術射擊遊戲，我們把那份熱情轉成一個互動學習網頁：第一人稱扮演救援隊員，平日先整備居家防災、防災包與家庭集結點，再演習地震防護與戰時受傷止血，同時學英文單字與發音。</p>
-    <p class="tagline">RESCUE STARTS WITH YOU</p><br>
+    <p class="eyebrow">DISASTER PREPAREDNESS // 防災探索隊</p>
+    <h1><span class="nowrap">先保護自己，</span><br><span class="nowrap">再幫助別人</span></h1>
+    <p class="lead">孩子喜歡戰術風格的遊戲，我們把那份熱情轉成防災教育互動：第一人稱扮演防災探索隊員，完成六個任務（防災背包、地震、火災、颱風淹水、防空警報、與家人失散），同時學英文單字與發音，集滿六枚徽章，最後印出「防災關鍵卡」。</p>
+    <p class="tagline">STAY CALM. STAY SAFE.</p><br>
     <a class="cta" href="game/index.html">開始互動任務</a>
   </div>
-  <svg class="emblem" viewBox="0 0 200 220" role="img" aria-label="救援隊徽章：盾牌與醫療十字">
+  <svg class="emblem" viewBox="0 0 200 220" role="img" aria-label="防災探索隊徽章：盾牌與醫療十字">
     <path d="M100 8 L184 40 V112 C184 162 146 196 100 212 C54 196 16 162 16 112 V40 Z" fill="#0b1411" stroke="#3ddc84" stroke-width="5"/>
     <path d="M100 26 L166 51 V112 C166 152 137 180 100 193 C63 180 34 152 34 112 V51 Z" fill="none" stroke="#2a6b49" stroke-width="2" stroke-dasharray="6 5"/>
     <path d="M84 62 H116 V94 H148 V126 H116 V158 H84 V126 H52 V94 H84 Z" fill="#3ddc84"/>
@@ -38,35 +39,37 @@
   </svg>
 </section>
 
-<div class="callout alert"><strong>目前狀態：互動原型。</strong>3 個平日整備站、2 個演習、單字庫與家庭防災卡都可以操作；但防災與急救步驟還沒和官方資料核對，不可當成急救教學使用。</div>
+<div class="callout alert"><strong>目前狀態：互動原型，防災教育模擬。</strong>六個任務、徽章集點卡、單字庫、家庭防災檢查表與防災關鍵卡都可以操作；這不是正式救護訓練，也沒有獲得任何機關認證。部分內容已對照官方頁面，其餘為一般防災原則，請看「教材來源」頁的核對狀態。</div>
 
 <h2>這個網站整理了什麼</h2>
-<p>這是一段親子教養專案中的設計討論：家長提出想法、規劃出第一版設計、孩子再提出建議，最後調整成現在的版本。網站保留討論中的重要內容、決策與理由。</p>
+<p>這是一段親子教養專案中的設計討論：家長提出想法、孩子提出建議、再依回饋一步步調整。網站保留重要內容、決策與理由，也列出教材來源與尚未核對的地方。</p>
 
-<h2>一頁看懂：六個結論</h2>
+<h2>一頁看懂：核心理念</h2>
+<div class="flow-big"><span>先保護自己</span><i>→</i><span>判斷危險</span><i>→</i><span>正確避難</span><i>→</i><span>尋求協助</span><i>→</i><span>安全且能力允許時才幫助別人</span></div>
 <div class="grid">
-  <div class="card"><strong>1. 平日整備，災時不慌</strong>先學居家防災、準備防災包、約好走散時的集結點，再演習兩個重大災難：地震防護、戰時受傷止血帶。</div>
-  <div class="card"><strong>2. 主軸來自孩子</strong>孩子指出：遊戲裡打一針就好，現實沒有。所以要先做對救命步驟，才能說「別擔心，我來了」。</div>
-  <div class="card"><strong>3. 借風格，不借遊戲</strong>只參考戰術任務的感覺（任務簡報、無線電、整備），不用任何遊戲的名稱、角色或畫面；不打仗，角色是救援隊員。</div>
-  <div class="card"><strong>4. 安全第一，孩子先呼救</strong>孩子的首要任務是確認安全、呼叫大人、撥 119；止血帶是了解與協助用的進階內容。</div>
-  <div class="card"><strong>5. 英文不計時、可跳過</strong>每件防災包物品帶一個英文單字與發音；英文不設時間壓力，避免受挫。</div>
-  <div class="card"><strong>6. 犯錯不扣分，最後做防災卡</strong>答錯由隊長說明原因再重選；最後印出「我們家的防災卡」，貼在家裡、教家人。</div>
+  <div class="card"><strong>1. 六個任務，一關一枚徽章</strong>每關有場景插圖、隊長無線電、提示、答錯說明後重選、覆盤七段，完成蓋章。</div>
+  <div class="card"><strong>2. 主軸來自孩子</strong>遊戲裡打一針就好，現實沒有；所以要先做對救命步驟，才能說「別擔心，我來了」。</div>
+  <div class="card"><strong>3. 兒童不是救援人員</strong>小朋友先保護自己、找大人、撥 119；急救與止血帶內容目前先不放進遊戲。</div>
+  <div class="card"><strong>4. 英文輔助、不取代行動</strong>43 個單字與各關句型都有聽與慢速發音；英文不計時、可跳過，也可關閉語音。</div>
+  <div class="card"><strong>5. 犯錯不扣分，有聲光回饋</strong>答對有「✓ 做對了」與柔和提示音；答錯隊長說明原因再選；音效、動畫都能關。</div>
+  <div class="card"><strong>6. 離線、不上傳</strong>本機只存勾選與進度，不存姓名住址電話；聯絡卡列印後手寫。</div>
 </div>
 
 <h2>網站導覽</h2>
 <div class="grid">
   <a class="card" href="positioning.html"><strong>1 定位與界線</strong>給誰用、學什麼、風格與版權界線、安全聲明。</a>
-  <a class="card" href="gameplay.html"><strong>2 遊戲流程與任務</strong>平日整備三站（居家檢查、防災包、集結點）、兩個演習、止血帶步驟。</a>
-  <a class="card" href="english.html"><strong>3 英文與發音</strong>單字清單、裝備卡設計、離線發音做法。</a>
-  <a class="card" href="child-idea.html"><strong>4 孩子的建議</strong>「別擔心，我來了」主軸、遊戲 vs 現實破解卡、我們家的防災卡、範圍調整。</a>
-  <a class="card" href="parents-tech.html"><strong>5 家長引導與技術</strong>每關的家長小卡、離線網頁技術規劃。</a>
-  <a class="card" href="decisions.html"><strong>6 決策與下一步</strong>重要決策與依據、開發順序、待決定事項。</a>
+  <a class="card" href="gameplay.html"><strong>2 六個任務</strong>六關的情境、流程時間軸、口訣、防災包清單、集結點、集點卡與防災關鍵卡。</a>
+  <a class="card" href="english.html"><strong>3 英文與發音</strong>單字表、任務句型、離線發音與失敗處理。</a>
+  <a class="card" href="child-idea.html"><strong>4 孩子的建議</strong>主軸、破解卡、集點卡與音效回饋、範圍調整。</a>
+  <a class="card" href="parents-tech.html"><strong>5 家長引導與技術</strong>家長小卡、陪同模式、離線技術、測試做法。</a>
+  <a class="card" href="sources.html"><strong>6 教材來源</strong>官方來源、已核對與尚待確認的內容、補充影片。</a>
+  <a class="card" href="decisions.html"><strong>7 決策與下一步</strong>重要決策與依據、後續事項。</a>
 </div>
 <nav class="pager" aria-label="上下頁">
   <span></span>
   <span><a href="positioning.html">1 定位與界線 →</a></span>
 </nav>
   </main>
-  <footer>設計草案，急救內容尚未經官方核對，不可作為急救教學。本專案為原創設計，與任何遊戲公司無關。</footer>
+  <footer>防災教育模擬，不是正式救護訓練；內容整理自公開資料，未獲任何機關認證。原創設計，與任何遊戲公司無關。</footer>
 </body>
 </html>
