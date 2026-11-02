@@ -124,6 +124,8 @@ window.runE2E = async function () {  const R = [];
   q('#start').click();
   ok('演習基地：六關 + 家庭練習兩張卡片', qa('.mission-card').length === 8, qa('.mission-card').length);
   ok('演習基地沒有「協助與急救」區塊', !/協助與急救/.test(q('main').textContent) && !qa('.mission-card').some(x => /止血帶|簡易包紮|現場評估/.test(x.textContent)));
+  q('.g-nav [data-go="title"]').click(); ok('導覽列「首頁」可以回到起始畫面，且保留呼號', q('h1').textContent.includes('先保護自己') && !!q('#start') && q('#cs').value.length > 0);
+  q('#start').click(); q('.g-brand').click(); ok('左上角標題也可以回到首頁', !!q('#start')); q('#start').click();
   ok('演習基地：集點卡 6 格', qa('.stampcard.mini .stamp').length === 6);
   const needs = HG.ITEMS.filter(i => i.need).map(i => i.id);
   const FULL = needs.concat(['pen', 'helmet', 'shoes']).slice(0, 14);
