@@ -389,3 +389,43 @@ th { background: var(--panel-2); color: var(--green); }
 .startbar { position: sticky; bottom: 0; z-index: 6; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: center; margin: 24px -16px 0; padding: 10px 16px; background: rgba(5, 8, 7, 0.96); border-top: 2px solid var(--green); box-shadow: 0 -8px 20px rgba(0, 0, 0, 0.65); }
 @media (max-width: 640px) { .start-top .btn.big { width: 100%; text-align: center; } .startbar .btn.big { flex: 1 1 60%; text-align: center; } }
 @media print { .startbar, .start-top { display: none !important; } }
+
+/* 任務橫幅與左右兩欄版面：一進來就知道要做什麼，不用捲動 */
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.goal { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; padding: 10px 14px; background: rgba(61, 220, 132, 0.14); border-bottom: 1px solid var(--green-dim); }
+.goal .goal-t { color: var(--green); font-family: var(--mono); font-size: 13px; letter-spacing: 2px; white-space: nowrap; }
+.goal b { color: #fff; font-size: 20px; line-height: 1.4; }
+.goal .goal-how { color: var(--amber); font-size: 16px; font-weight: bold; }
+.hud .viewport { max-height: 52vh; }
+@media (min-width: 820px) {
+  .hud { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(300px, 1fr); grid-template-areas: "top top" "bar bar" "goal goal" "view radio" "view action"; grid-template-rows: auto auto auto auto 1fr; }
+  .hud-top { grid-area: top; } .stepbar { grid-area: bar; } .goal { grid-area: goal; }
+  .hud .viewport { grid-area: view; align-self: start; max-height: none; }
+  .hud-bottom { grid-area: radio; display: flex; flex-direction: column; gap: 8px; border-top: 0; border-left: 1px solid var(--line); align-items: stretch; }
+  .hud-bottom .radio { order: -1; }
+  .hud .action { grid-area: action; border-left: 1px solid var(--line); border-top: 1px solid var(--line); }
+}
+
+/* 矮螢幕（筆電、瀏覽器放大時）：壓縮版面，讓任務、隊長說明、選項同時看得到，不用捲動 */
+@media (max-height: 760px) and (min-width: 820px) {
+  .g-brand small, .hud .pack-mini, .note.safe { display: none; }
+  .g-inner { padding: 4px 16px; }
+  .g-nav button, .g-nav a { padding: 6px 12px; }
+  .g-main { padding-top: 8px; }
+  .hud-top { padding: 4px 14px; } .goal { padding: 6px 14px; } .goal b { font-size: 18px; } .goal .goal-how { font-size: 15px; }
+  .hud-bottom { padding: 6px 12px; } .hud .action { padding: 8px 12px; }
+  .opt { padding: 6px 12px; font-size: 15px; line-height: 1.45; }
+  .fb { margin-top: 8px; padding: 8px 12px; font-size: 15px; }
+  .hud .viewport { max-height: calc(100vh - 150px); }
+}
+/* 手機：導覽列改成單行可左右滑動的小列，省下垂直空間 */
+@media (max-width: 640px) {
+  .g-brand small { display: none; }
+  .g-inner { padding: 6px 12px; }
+  .g-nav { flex-wrap: nowrap; overflow-x: auto; width: 100%; padding-bottom: 2px; }
+  .g-nav button, .g-nav a { flex: none; padding: 6px 12px; }
+  .goal b { font-size: 18px; }
+  .hud .viewport { max-height: 40vh; }
+  .hud-bottom { padding: 6px 10px; gap: 6px; } .hud .pack-mini { display: none; }
+}
+.hud .action.solved .hintrow { display: none; }

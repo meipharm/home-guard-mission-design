@@ -26,7 +26,7 @@
 
   const S = {
     callsign: '救援一號',
-    set: Object.assign({ mute: false, sfx: true, calm: false, parent: false, showBleed: false }, store.get('settings', {})),
+    set: Object.assign({ mute: false, sfx: true, amb: true, calm: false, parent: false, showBleed: false }, store.get('settings', {})),
     loadout: store.get('loadout', []).filter(id => ITEMS.some(i => i.id === id && !i.hidden)).slice(0, SLOTS),
     done: store.get('done', {}),
     said: new Set(store.get('said', [])),
@@ -87,6 +87,52 @@
     } catch (e) { /* 沒有音效也能玩 */ }
   }
 
+  // ---------- 情境環境音：用 Web Audio 即時合成，音量很小、沒有爆炸或尖銳聲、可在設定關閉 ----------
+  let AMB = null, ambKind = null;
+  function ambStop() {
+    ambKind = null;
+    if (!AMB) return;
+    const a = AMB; AMB = null;
+    try { a.stop(); } catch (e) { /* 忽略 */ }
+  }
+  function ambStart(kind) {
+    if (kind === ambKind) return;          // 同一種聲音不重複啟動（畫面重繪不會讓聲音中斷）
+    ambStop();
+    if (!kind || !S.set.amb) return;
+    ambKind = kind;
+    try {
+      AC = AC || new (window.AudioContext || window.webkitAudioContext)();
+      if (AC.state === 'suspended') AC.resume();
+      const nodes = [], timers = [];
+      const master = AC.createGain(); master.gain.value = 0; master.connect(AC.destination);
+      master.gain.linearRampToValueAtTime(1, AC.currentTime + 0.8);
+      const noiseSrc = () => { const b = AC.createBuffer(1, AC.sampleRate * 2, AC.sampleRate), d = b.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; const s = AC.createBufferSource(); s.buffer = b; s.loop = true; return s; };
+      const noise = (type, freq, q, gain) => { const s = noiseSrc(), f = AC.createBiquadFilter(), g = AC.createGain(); f.type = type; f.frequency.value = freq; f.Q.value = q; g.gain.value = gain; s.connect(f); f.connect(g); g.connect(master); s.start(); nodes.push(s); return g; };
+      const osc = (type, freq, gain) => { const o = AC.createOscillator(), g = AC.createGain(); o.type = type; o.frequency.value = freq; g.gain.value = gain; o.connect(g); g.connect(master); o.start(); nodes.push(o); return { o, g }; };
+      const lfo = (param, rate, depth) => { const l = AC.createOscillator(), g = AC.createGain(); l.frequency.value = rate; g.gain.value = depth; l.connect(g); g.connect(param); l.start(); nodes.push(l); };
+      const beep = (freq, at, dur, vol) => { const o = AC.createOscillator(), g = AC.createGain(), t = AC.currentTime + at; o.type = 'sine'; o.frequency.value = freq; g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + dur); o.connect(g); g.connect(master); o.start(t); o.stop(t + dur + 0.05); };
+      if (kind === 'quake') { const g = noise('lowpass', 110, 0.7, 0.45); lfo(g.gain, 5, 0.22); const s = osc('sine', 48, 0.32); lfo(s.g.gain, 7, 0.18); }
+      if (kind === 'fire') { const g = noise('bandpass', 2200, 0.6, 0.05); lfo(g.gain, 11, 0.035); noise('lowpass', 300, 0.6, 0.05); const ring = () => [0, 0.22, 0.44].forEach(t => beep(1900, t, 0.12, 0.035)); ring(); timers.push(setInterval(ring, 3200)); }
+      if (kind === 'rain') { noise('highpass', 2600, 0.5, 0.06); const w = noise('lowpass', 420, 0.5, 0.06); lfo(w.gain, 0.2, 0.03); }
+      if (kind === 'siren') { const s = osc('sine', 440, 0.028); lfo(s.o.frequency, 0.22, 90); }
+      if (kind === 'crowd') { const g = noise('bandpass', 520, 0.8, 0.05); lfo(g.gain, 0.7, 0.02); noise('lowpass', 250, 0.5, 0.02); }
+      AMB = { stop() {
+        timers.forEach(clearInterval);
+        try { master.gain.cancelScheduledValues(AC.currentTime); master.gain.setValueAtTime(master.gain.value, AC.currentTime); master.gain.linearRampToValueAtTime(0, AC.currentTime + 0.3); } catch (e) { /* 忽略 */ }
+        setTimeout(() => { nodes.forEach(n => { try { n.stop(); } catch (e) { /* 忽略 */ } }); try { master.disconnect(); } catch (e) { /* 忽略 */ } }, 450);
+      } };
+    } catch (e) { /* 沒有音效也能玩 */ }
+  }
+  // 依關卡與步驟決定環境音
+  function ambFor(m, c, st) {
+    if (m.id === 'm1') return SC.classroomShake(c) ? 'quake' : null;
+    if (m.id === 'f1') return 'fire';
+    if (m.id === 'w1') return 'rain';
+    if (m.id === 'a1') return c.i === 0 ? 'siren' : null;
+    if (m.id === 'p3') return (st.type !== 'map' && c.i >= 3) ? 'crowd' : null;
+    return null;
+  }
+
   // ---------- 發音：瀏覽器內建語音，不錄音；任何失敗都不影響遊戲 ----------
   function speak(text, slow) {
     if (S.set.mute) { toast('語音已關閉，可在「設定」打開。'); return; }
@@ -119,6 +165,7 @@
 
   const ROUTES = {};
   function show(name, arg) {
+    if (name !== 'step') ambStop();
     document.querySelectorAll('.g-nav [data-go]').forEach(b => b.setAttribute('aria-current', String(b.dataset.go === name)));
     ROUTES[name](arg);
     window.scrollTo(0, 0);
@@ -380,12 +427,13 @@
   const settingsPanel = () => `
     <div class="panel settings"><strong>設定</strong>
       <label class="check"><input id="st-sfx" type="checkbox" ${S.set.sfx ? 'checked' : ''}> 提示音效（答對、答錯、找到東西時的柔和短音）</label>
+      <label class="check"><input id="st-amb" type="checkbox" ${S.set.amb ? 'checked' : ''}> 情境環境音（地震的低沉震動、雨聲、遠處提示音…，音量很小）</label>
       <label class="check"><input id="st-mute" type="checkbox" ${S.set.mute ? 'checked' : ''}> 關閉語音朗讀（英文發音會安靜）</label>
       <label class="check"><input id="st-calm" type="checkbox" ${S.set.calm ? 'checked' : ''}> 降低動畫（不搖晃、不漂移）</label>
     </div>`;
   function bindSettings() {
-    const map = { 'st-sfx': 'sfx', 'st-mute': 'mute', 'st-calm': 'calm', 'st-parent': 'parent', 'st-bleed': 'showBleed' };
-    Object.keys(map).forEach(id => { const el = $('#' + id); if (el) el.onchange = () => { S.set[map[id]] = el.checked; save(); applySettings(); if (id === 'st-sfx' && el.checked) sfx('ok'); }; });
+    const map = { 'st-sfx': 'sfx', 'st-amb': 'amb', 'st-mute': 'mute', 'st-calm': 'calm', 'st-parent': 'parent', 'st-bleed': 'showBleed' };
+    Object.keys(map).forEach(id => { const el = $('#' + id); if (el) el.onchange = () => { S.set[map[id]] = el.checked; save(); applySettings(); if (id === 'st-sfx' && el.checked) sfx('ok'); if (id === 'st-amb' && !el.checked) ambStop(); }; });
   }
 
   ROUTES.title = function () {
@@ -580,6 +628,8 @@
 
   // ---------- 第一人稱 HUD ----------
   const CAPTAIN = `<svg viewBox="0 0 40 40" class="captain" aria-hidden="true"><circle cx="20" cy="22" r="11" fill="#10211a" stroke="${G}" stroke-width="2"/><path d="M9 20a11 11 0 0 1 22 0" fill="${G}" stroke="none" opacity=".85"/><path d="M9 21v7M31 21v7M31 28l-6 4" fill="none" stroke="${G}" stroke-width="2" stroke-linecap="round"/><circle cx="16" cy="24" r="1.6" fill="${G}"/><circle cx="24" cy="24" r="1.6" fill="${G}"/></svg>`;
+  // 每種題型的操作說明（寫在任務橫幅裡，孩子一進來就知道要做什麼）
+  const HOW = { map: '👆 在畫面上點一個位置', choice: '👇 從下面選一個答案', multi: '☑ 勾選所有適合的，再按「確認」', sequence: '1️⃣ 照順序，一個一個點', item: '🎒 從下面選一件裝備', hold: '👇 按住按鈕不放', hunt: '🔍 點畫面上有「?」的地方', slots: '💬 一句一句選出適合的話' };
   ROUTES.step = function () {
     const c = S.cur, m = c.m, st = c.list[c.i];
     const total = c.branch ? c.list.length : m.steps.filter(s => !s.only || s.only === 'A').length;
@@ -589,18 +639,20 @@
       <div class="hud">
         <div class="hud-top"><span>${esc(m.name)}</span><span class="obj">STEP ${c.i + 1} / ${total}</span><span class="sim">模擬演練</span>${bleed}</div>
         <div class="stepbar"><i style="width:${Math.round((c.i + (c.solved ? 1 : 0)) / total * 100)}%"></i></div>
+        <div class="goal"><span class="goal-t">🎯 你的任務</span><b>${esc(st.prompt)}</b><span class="goal-how">${HOW[st.type] || ''}</span></div>
         <div class="viewport"><span class="visor">VISOR // ${esc(S.callsign)}</span>
           <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>${sceneHTML(m, c, st)}
           ${c.solved ? `<div class="okmark" role="status">${c.lastKind === 'alt' ? '✔ 用替代做法完成' : '✓ 做對了！'}</div>` : ''}</div>
         <div class="hud-bottom"><div class="pack-mini" aria-label="防災包">${pack}</div>
           <p class="radio" aria-live="polite" style="margin:0">${CAPTAIN}<span class="who">隊長</span>${esc(st.radio)}</p></div>
-        <div class="action"><p class="prompt">${esc(st.prompt)}</p><div id="ctl"></div><div id="fb" aria-live="polite"></div>
-          <div class="row"><button type="button" class="say big" id="hintbtn">需要提示</button>${m.video ? `<a class="say big" href="${esc(m.video.url)}" target="_blank" rel="noopener">▶ 補充影片</a>` : ''}<span class="note safe">安全提醒：${esc(m.safety)}</span></div></div>
+        <div class="action${c.solved ? ' solved' : ''}"><p class="prompt sr-only">${esc(st.prompt)}</p><div id="ctl"></div><div id="fb" aria-live="polite"></div>
+          <div class="row hintrow"><button type="button" class="say big" id="hintbtn">需要提示</button>${m.video ? `<a class="say big" href="${esc(m.video.url)}" target="_blank" rel="noopener">▶ 補充影片</a>` : ''}<span class="note safe">安全提醒：${esc(m.safety)}</span></div></div>
       </div>
       ${parentCard(m)}
       <div class="row"><button type="button" class="btn ghost" id="quit">暫停，回演習基地</button></div>`;
     $('#quit').onclick = () => { S.cur = null; show('hub'); };
     $('#hintbtn').onclick = () => hint(st);
+    ambStart(ambFor(m, c, st));
     ({ choice: ctlChoice, multi: ctlMulti, sequence: ctlSequence, item: ctlItem, hold: ctlHold, map: ctlMap, hunt: ctlHunt, slots: ctlSlots })[st.type](st, c);
     if (c.solved) solvedUI(c.lastFb, c.lastKind);
   };
@@ -939,7 +991,7 @@
       <div class="row"><button type="button" class="btn" data-go="hub">回演習基地</button></div>`;
   };
 
-  window.HG = { S, show, store, MISSIONS, ITEMS, WORDS, ROUTES };
+  window.HG = { S, show, store, MISSIONS, ITEMS, WORDS, ROUTES, ambKind: () => ambKind };
   applySettings();
   show('title');
 })();

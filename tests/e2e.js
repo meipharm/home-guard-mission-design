@@ -138,6 +138,19 @@ window.runE2E = async function () {
   HG.show('stamps'); ok('集點卡集滿顯示恭喜', q('.s-sum').textContent.includes('6') && /恭喜/.test(q('.s-sum').textContent));
   HG.show('hub'); ok('重玩後進度不遺失', qa('.mission-card.done').length >= 6);
 
+  // ===== 情境環境音：依關卡與步驟啟動，離開或答對後停止，可在設定關閉 =====
+  const ambAt = (id, i, opt) => { opt = opt || {}; HG.show('brief', HG.MISSIONS.find(x => x.id === id)); q('#go').click(); const cc = HG.S.cur; if (opt.branch) { cc.branch = opt.branch; cc.list = cc.m.steps.filter(s => !s.only || s.only === opt.branch); } cc.i = i; cc.solved = !!opt.solved; HG.ROUTES.step(); return HG.ambKind(); };
+  HG.S.set.amb = true;
+  ok('環境音：地震搖晃時有低沉震動', ambAt('m1', 0) === 'quake');
+  ok('環境音：地震答對後（搖晃停止）安靜', ambAt('m1', 0, { solved: true }) === null);
+  ok('環境音：火災有輕微警示聲', ambAt('f1', 1, { branch: 'B' }) === 'fire');
+  ok('環境音：颱風淹水有雨聲', ambAt('w1', 2) === 'rain');
+  ok('環境音：防空演練只在警報的第一步有柔和提示音', ambAt('a1', 0) === 'siren' && ambAt('a1', 1) === null);
+  ok('環境音：與家人失散的人潮場景有遠處人聲', ambAt('p3', 3) === 'crowd' && ambAt('p3', 0) === null);
+  ok('環境音：防災背包沒有環境音', ambAt('p2', 0) === null);
+  ambAt('m1', 0); HG.show('hub'); ok('環境音：離開關卡就停止', HG.ambKind() === null);
+  HG.S.set.amb = false; ok('環境音：設定關閉後不再播放', ambAt('m1', 0) === null); HG.S.set.amb = true; HG.show('hub');
+
   // ===== 2. 功能 =====
   HG.S.loadout = []; HG.show('brief', HG.MISSIONS.find(x => x.id === 'p2')); q('#go').click();
   const ids = HG.ITEMS.map(i => i.id);
@@ -187,7 +200,7 @@ window.runE2E = async function () {
   ok('關鍵卡各組有簡單圖示', qa('#poster .kc .m-icon svg').length === 6);
 
   HG.show('sources'); ok('教材來源頁含 5 個指定來源與免責', ['tfdp.com.tw', 'prepare.mnd.gov.tw/emergency-responses', 'go-bag', 'nfa.gov.tw', 'redcross.org'].every(u => q('main').innerHTML.includes(u)) && /沒有獲得任何機關認證/.test(q('main').textContent));
-  ok('設定：音效、語音、動畫可切換', ['st-sfx', 'st-mute', 'st-calm'].every(id => (HG.show('hub'), q('#' + id))));
+  ok('設定：音效、語音、動畫可切換', ['st-sfx', 'st-amb', 'st-mute', 'st-calm'].every(id => (HG.show('hub'), q('#' + id))));
   HG.S.set.calm = true; ctx.win.document.body.classList.add('calm'); ok('降低動畫模式可開啟', ctx.doc.body.classList.contains('calm')); ctx.doc.body.classList.remove('calm');
 
   // ===== 3. 版面（各寬度無水平溢出） =====
@@ -206,7 +219,7 @@ window.runE2E = async function () {
     h.S.cur = null; h.show('vocab'); over('單字庫'); h.show('family'); over('家庭練習'); h.show('card'); over('防災關鍵卡'); h.show('stamps'); over('集點卡'); h.show('sources'); over('教材來源');
     if (w === 320) {
       h.show('brief', h.MISSIONS.find(x => x.id === 'm1')); qq('#go').click();
-      const bad = [...d.querySelectorAll('button, .zone')].filter(b => { const r = b.getBoundingClientRect(); return r.width > 0 && r.right > w + 1; });
+      const bad = [...d.querySelectorAll('button, .zone')].filter(b => !b.closest('.g-nav') && (() => { const r = b.getBoundingClientRect(); return r.width > 0 && r.right > w + 1; })());   // 導覽列在手機上是可左右滑動的單行，不算溢出
       ok('320px 按鈕不超出畫面', bad.length === 0, bad.length);
       const small = [...d.querySelectorAll('.opt, .btn, .g-nav button, .say')].filter(b => { const r = b.getBoundingClientRect(); return r.width > 0 && (r.height < 43.5 || r.width < 43.5); });
       ok('主要按鈕觸控目標至少 44px', small.length === 0, small.map(b => b.className + ':' + Math.round(b.getBoundingClientRect().height)).slice(0, 4).join());
