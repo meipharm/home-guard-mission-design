@@ -595,3 +595,11 @@ textarea#notein { width: 100%; background: #070a09; color: #fff; border: 1px sol
 /* 左上角標題可點，回到首頁 */
 button.g-brand { background: none; border: 0; padding: 0; text-align: left; cursor: pointer; font-family: inherit; line-height: 1.3; }
 button.g-brand:hover { color: var(--green); }
+
+/* 示意圖不佔太多空間：防災包頁改成標題旁的小縮圖；任務簡報的場景圖限制高度 */
+.gb-head { display: flex; gap: 18px; align-items: center; justify-content: space-between; }
+.gb-headtext { flex: 1 1 auto; min-width: 0; }
+.viewport.preview.thumb { flex: none; width: 200px; margin: 0; }
+.viewport.preview { max-height: 34vh; }
+.viewport.preview.thumb { max-height: none; }
+@media (max-width: 640px) { .viewport.preview.thumb { display: none; } }

@@ -656,10 +656,14 @@
           <button type="button" class="toggle" data-item="${it.id}">${S.loadout.includes(it.id) ? '已放入（點一下拿出）' : '放進防災包'}</button>
         </div>`).join('');
     app.innerHTML = `
-      <p class="eyebrow">${m.code} // GO BAG</p>
-      <h1 class="with-icon"><span class="m-icon big">${mIcon(m)}</span>整理我們家的防災包</h1>
-      <div class="viewport preview">${wrap(SC.bag(null))}</div>
-      <p class="lead">背包有 ${SLOTS} 格。「優先」的先放，再用剩下的空間取捨「建議」物品。沒有唯一正確的組合，依家人需要調整。<strong>你的防災包就在旁邊（手機在上方），放進去的東西會馬上出現，點一下格子可以拿出來。</strong></p>
+      <div class="gb-head">
+        <div class="gb-headtext">
+          <p class="eyebrow">${m.code} // GO BAG</p>
+          <h1 class="with-icon"><span class="m-icon big">${mIcon(m)}</span>整理我們家的防災包</h1>
+          <p class="lead">背包有 ${SLOTS} 格。「優先」的先放，再用剩下的空間取捨「建議」物品。沒有唯一正確的組合，依家人需要調整。<strong>你的防災包就在旁邊（手機在上方），放進去的東西會馬上出現，點一下格子可以拿出來。</strong></p>
+        </div>
+        <div class="viewport preview thumb" aria-hidden="true">${wrap(SC.bag(null))}</div>
+      </div>
       ${report}
       <div class="gobag-layout">
         <div class="gb-items">${CATS.map((cat, i) => `<h2>${i < 4 ? `${i + 1}. ` : ''}${esc(cat)}</h2><div class="items">${group(cat)}</div>`).join('')}</div>
