@@ -629,6 +629,42 @@
     show('step');
   }
 
+  // ---------- 我的防災包檢查表：列印或另存為 PDF（離線；不含個資，家長手寫日期與數量） ----------
+  const EXPIRE_IDS = ['water', 'food', 'snack', 'medicine', 'firstaid', 'battery', 'wipes', 'mask', 'care'];
+  const FUNC_TEXT = { flashlight: '會亮、電池有電', radio: '收得到、電池有電', battery: '電量夠、沒漏液', powerbank: '已充飽、能充電', whistle: '吹得響', helmet: '扣環完整', shoes: '合腳、沒破損', gloves: '沒破洞', raincoat: '沒破洞', blanket: '沒破損', pen: '寫得出來', zipbag: '封口完整', care: '依家人需要更新' };
+  function bagCardHTML() {
+    const items = S.loadout.map(id => ITEM[id]).filter(Boolean);
+    const rows = CATS.map(cat => {
+      const list = items.filter(it => it.cat === cat);
+      return list.length ? `<tr class="cat"><td colspan="5">${esc(cat)}</td></tr>` + list.map(it => `<tr><td class="bx">☐</td><td class="nm"><strong>${esc(it.name)}</strong></td><td class="qty"></td><td class="ex">${EXPIRE_IDS.includes(it.id) ? '到期日：' : '—'}</td><td class="fn">${FUNC_TEXT[it.id] ? '☐ ' + esc(FUNC_TEXT[it.id]) : '—'}</td></tr>`).join('') : '';
+    }).join('');
+    const miss = ITEMS.filter(it => !it.hidden && it.need && !S.loadout.includes(it.id)).map(it => esc(it.name));
+    const blank = '<tr><td>&nbsp;</td><td></td><td></td></tr>'.repeat(3);
+    return `<div id="bagcard" class="bagcard">
+      <p class="eyebrow">HOME GUARD // 防災包檢查表</p>
+      <h3>我的防災包檢查表</h3>
+      <div class="bc-meta"><span>隊員：<b>${esc(S.callsign)}</b></span><span>製表日期：<b>${fmtDate(Date.now())}</b></span><span>下次檢查日期：＿＿＿＿＿（約 6 個月後）</span></div>
+      <div class="bc-remind"><b>⏰ 定期檢查提醒</b><ul>
+        <li><strong>每半年檢查一次</strong>（可以和家人約好每年的兩個固定日子），快過期的先吃、先換新。</li>
+        <li><strong>每件物品標示有效日期</strong>；水、食物、藥品、電池最要注意。</li>
+        <li><strong>備品要實際試用，確認功能正常</strong>：手電筒會亮、收音機收得到、行動電源有電、哨子吹得響；電池放太久會漏液或沒電。</li>
+        <li>家人的需求改變（藥品、嬰幼兒或長者用品、鞋子尺寸）時重新調整；防災包放在玄關，全家都知道。</li>
+      </ul></div>
+      <table class="bc-table"><thead><tr><th>已備</th><th>物品</th><th>數量</th><th>效期／到期日</th><th>功能檢查</th></tr></thead><tbody>${rows || '<tr><td colspan="5">（還沒放入物品）</td></tr>'}</tbody></table>
+      ${miss.length ? `<p class="bc-miss"><b>還可以補齊（建議優先準備）：</b>☐ ${miss.join('　☐ ')}</p>` : ''}
+      <div class="bc-log"><b>檢查紀錄</b><table><thead><tr><th>檢查日期</th><th>檢查的人</th><th>換新或補充了什麼</th></tr></thead><tbody>${blank}</tbody></table></div>
+      <p class="bc-src">依臺灣全民安全指引：標示物品有效日期、每半年檢查。內容請依家人需求調整；處方藥、證件、現金等請家長準備與保管。</p>
+    </div>`;
+  }
+  function printBag() {
+    const old = document.getElementById('bagcard'); if (old) old.remove();
+    document.body.insertAdjacentHTML('beforeend', bagCardHTML());
+    document.body.classList.add('print-bag');
+    const done = () => { document.body.classList.remove('print-bag'); const c = document.getElementById('bagcard'); if (c) c.remove(); window.removeEventListener('afterprint', done); };
+    window.addEventListener('afterprint', done);
+    try { window.print(); } catch (e) { done(); toast('這個瀏覽器無法開啟列印視窗。'); }
+  }
+
   // ---------- 防災包整備 ----------
   ROUTES.gobag = function (m, checked) {
     const slots = Array.from({ length: SLOTS }, (_, i) => {
@@ -646,7 +682,8 @@
         <ul class="tips">${BAG_TIPS.place.map(p => `<li class="${p.ok ? 'yes' : 'no'}">${p.ok ? '✓' : '✗'} ${esc(p.t)}</li>`).join('')}</ul>
         <strong>背包怎麼選、怎麼管理？</strong>
         <ul>${BAG_TIPS.bag.map(t => `<li>${esc(t)}</li>`).join('')}</ul>
-        <div class="row"><button type="button" class="btn" id="finish">完成整備，繼續下一步</button><span class="note">還想調整可以繼續改，再按一次「檢查防災包」。</span></div>
+        <div class="callout amber"><strong>⏰ 做好之後，別忘了定期檢查：</strong>每件物品標示有效日期、<strong>每半年檢查一次效期</strong>，並<strong>試試手電筒、收音機、行動電源等備品功能是否正常</strong>。可以把你選好的清單輸出成檢查表（存成 PDF 或列印），貼在家裡。</div>
+        <div class="row"><button type="button" class="btn" id="finish">完成整備，繼續下一步</button><button type="button" class="btn ghost" id="exportbag2">🖨 輸出我的防災包檢查表（PDF）</button><span class="note">還想調整可以繼續改，再按一次「檢查防災包」。</span></div>
       </div>` : '';
     const group = cat => ITEMS.filter(it => !it.hidden && it.cat === cat).map(it => `
         <div class="item-card ${S.loadout.includes(it.id) ? 'on' : ''}">
@@ -669,7 +706,9 @@
         <div class="gb-items">${CATS.map((cat, i) => `<h2>${i < 4 ? `${i + 1}. ` : ''}${esc(cat)}</h2><div class="items">${group(cat)}</div>`).join('')}</div>
         <aside class="gb-side" aria-label="我的防災包"><div class="panel bagpanel"><strong>🎒 我的防災包（${S.loadout.length} / ${SLOTS}）</strong><div class="slots">${slots}</div>
           <p class="note gb-need">優先物品：已放 ${needHave} / ${needAll.length}</p>
-          <button type="button" class="btn" id="check" ${S.loadout.length ? '' : 'disabled'}>檢查防災包</button></div></aside>
+          <button type="button" class="btn" id="check" ${S.loadout.length ? '' : 'disabled'}>檢查防災包</button>
+          <button type="button" class="btn ghost" id="exportbag" ${S.loadout.length ? '' : 'disabled'}>🖨 輸出我的檢查表（PDF）</button>
+          <p class="note gb-remind">⏰ 每半年檢查效期，並試試備品功能是否正常。列印視窗選「另存為 PDF」。</p></div></aside>
       </div>
       <div class="gb-bar"><span>🎒 <strong>${S.loadout.length} / ${SLOTS}</strong>　優先 ${needHave} / ${needAll.length}</span><button type="button" class="btn" id="check2" ${S.loadout.length ? '' : 'disabled'}>檢查防災包</button></div>
       <p class="note">清單參考：${SOURCES.slice(2, 5).map(s => `<a href="${s.url}" target="_blank" rel="noopener">${esc(s.name)}</a>`).join('、')}。「優先」與「建議」是本遊戲為孩子整理的順序，請依家人需要調整。</p>
@@ -686,7 +725,8 @@
     });
     $$('[data-rm]').forEach(b => b.onclick = () => { S.loadout = S.loadout.filter(x => x !== b.dataset.rm); save(); const y = window.scrollY; ROUTES.gobag(m, false); window.scrollTo(0, y); });
     $('#check').onclick = $('#check2').onclick = () => { ROUTES.gobag(m, true); $('#report').scrollIntoView({ block: 'center' }); };
-    if (checked) $('#finish').onclick = () => startRun(m);
+    $('#exportbag').onclick = printBag;
+    if (checked) { $('#finish').onclick = () => startRun(m); $('#exportbag2').onclick = printBag; }
   };
 
   // ---------- 第一人稱 HUD ----------
@@ -1056,7 +1096,7 @@
       <div class="row"><button type="button" class="btn" data-go="hub">回演習基地</button></div>`;
   };
 
-  window.HG = { S, show, store, MISSIONS, ITEMS, WORDS, ROUTES, ambKind: () => ambKind };
+  window.HG = { S, show, store, MISSIONS, ITEMS, WORDS, ROUTES, ambKind: () => ambKind, bagCardHTML };
   applySettings();
   show('title');
 })();

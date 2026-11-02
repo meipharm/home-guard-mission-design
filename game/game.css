@@ -603,3 +603,38 @@ button.g-brand:hover { color: var(--green); }
 .viewport.preview { max-height: 34vh; }
 .viewport.preview.thumb { max-height: none; }
 @media (max-width: 640px) { .viewport.preview.thumb { display: none; } }
+
+/* 我的防災包檢查表：畫面上不顯示，列印／另存 PDF 時才出現（A4 一頁） */
+.bagcard { display: none; }
+.gb-remind { margin: 8px 0 0; color: var(--amber); }
+.gb-side .btn.ghost { width: 100%; text-align: center; margin-top: 8px; }
+@media print {
+  .print-bag .bagcard, .print-bag .bagcard * { visibility: visible; }
+  .print-bag .bagcard { display: block; position: absolute; left: 0; top: 0; width: 100%; box-sizing: border-box; padding: 5mm 6mm 4mm; background: #fff; color: #111; border: 3px solid #166534; font-size: 12px; line-height: 1.4; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .print-bag .bagcard * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .print-bag .bagcard .eyebrow { color: #15803d; text-align: center; font-size: 11px; margin: 0; letter-spacing: 2px; }
+  .print-bag .bagcard h3 { color: #14532d; font-size: 24px; margin: 2px 0 6px; padding-bottom: 4px; border-bottom: 3px solid #16a34a; text-align: center; }
+  .print-bag .bagcard .bc-meta { display: flex; flex-wrap: wrap; gap: 4px 16px; justify-content: space-between; font-size: 12.5px; margin-bottom: 6px; }
+  .print-bag .bagcard .bc-meta b { color: #14532d; }
+  .print-bag .bagcard .bc-remind { background: #fef3c7; border-left: 5px solid #f59e0b; padding: 5px 9px; margin: 0 0 7px; color: #78350f; }
+  .print-bag .bagcard .bc-remind b { font-size: 14px; }
+  .print-bag .bagcard .bc-remind ul { margin: 3px 0 0; padding-left: 18px; font-size: 12px; }
+  .print-bag .bagcard .bc-remind strong { color: #7c2d12; }
+  .print-bag .bagcard table { width: 100%; border-collapse: collapse; background: #fff; }
+  .print-bag .bagcard th, .print-bag .bagcard td { border: 1px solid #6b7280; padding: 3px 6px; color: #111; vertical-align: middle; text-align: left; }
+  .print-bag .bagcard thead th { background: #16a34a; color: #fff; font-size: 12px; }
+  .print-bag .bagcard tr.cat td { background: #dcfce7; color: #14532d; font-weight: bold; font-size: 12.5px; }
+  .print-bag .bagcard td.bx { width: 34px; text-align: center; font-size: 15px; }
+  .print-bag .bagcard td.nm { width: 36%; } .print-bag .bagcard td.qty { width: 54px; }
+  .print-bag .bagcard td.ex { width: 24%; color: #4b5563; } .print-bag .bagcard td.fn { color: #1f2937; }
+  .print-bag .bagcard .bc-miss { margin: 6px 0 0; padding: 4px 8px; border: 1.5px dashed #16a34a; color: #14532d; font-size: 12px; }
+  .print-bag .bagcard .bc-log { margin-top: 7px; } .print-bag .bagcard .bc-log b { color: #14532d; font-size: 13px; }
+  .print-bag .bagcard .bc-log td { height: 22px; }
+  .print-bag .bagcard .bc-src { margin: 6px 0 0; font-size: 10.5px; color: #4b5563; }
+  .gb-bar, .gb-side { display: none !important; }
+}
+@media print {
+  .print-bag .bagcard strong, .print-bag .bagcard td.nm strong { color: #111 !important; }
+  .print-bag .bagcard .bc-remind strong { color: #7c2d12 !important; }
+  .print-bag .bagcard .bc-meta b, .print-bag .bagcard .bc-log b { color: #14532d !important; }
+}

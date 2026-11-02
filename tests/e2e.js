@@ -162,6 +162,15 @@ window.runE2E = async function () {  const R = [];
   ok('防災包在側邊（獨立欄位，電腦版固定在畫面上）', !!q('.gb-side .slots') && qa('.gb-side [data-rm]').length === HG.S.loadout.length && !!q('.gobag-layout'));
   { const before = HG.S.loadout.length, rm = q('.gb-side [data-rm]'); rm.click(); ok('點背包格子可以拿出物品', HG.S.loadout.length === before - 1); }
   ok('側邊背包顯示已放數量與優先物品進度', q('.bagpanel').textContent.includes('/ 14') && q('.bagpanel').textContent.includes('優先物品：已放'));
+  ok('防災包有「輸出我的檢查表（PDF）」按鈕，放入物品後可按', !!q('#exportbag') && !q('#exportbag').disabled);
+  ok('防災包頁提醒每半年檢查效期與備品功能', q('.gb-side').textContent.includes('每半年檢查效期') && q('.gb-side').textContent.includes('備品功能'));
+  { const html = HG.bagCardHTML(); const names = HG.S.loadout.map(id => HG.ITEMS.find(x => x.id === id).name);
+    ok('檢查表含每個已選物品', names.every(n => html.includes(n)), names.length);
+    ok('檢查表含效期欄、功能檢查欄與勾選框', html.includes('效期') && html.includes('功能檢查') && html.includes('☐'));
+    ok('檢查表提醒每半年檢查、標示有效日期、試用確認功能', html.includes('每半年檢查一次') && html.includes('標示有效日期') && html.includes('確認功能正常'));
+    ok('檢查表含隊員呼號、製表日期、下次檢查日期與檢查紀錄欄', html.includes(HG.S.callsign) && html.includes('製表日期') && html.includes('下次檢查日期') && html.includes('檢查紀錄') && new RegExp('[0-9]{4}[/][0-9]{2}[/][0-9]{2}').test(html));
+    ok('檢查表不含輸入欄位（日期與數量列印後手寫）', !html.includes('<input') && !html.includes('<textarea'));
+    ok('檢查表平常不顯示在畫面上，只在列印時出現', !q('#bagcard')); }
   ok('物品卡有英文單字與發音鍵', qa('.item-card .word .say').length >= 30);
   ok('物品有用途與音節（不含隱藏的止血帶）', qa('.item-card .syl').length >= 15 && qa('.item-card .use').length === HG.ITEMS.filter(i => !i.hidden).length);
   ok('防災包不再出現止血帶', !q('main').textContent.includes('止血帶'));
