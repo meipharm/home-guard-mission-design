@@ -869,7 +869,7 @@
     sfx('win');
     setTimeout(() => sfx('stamp'), 650);
     $('#flip').onclick = () => {
-      $('#myth').innerHTML = `<div class="myth"><div class="game"><b>IN GAME 遊戲裡</b>${esc(m.myth.game)}</div><div class="real"><b>IN REAL LIFE 現實中</b>${esc(m.myth.real)}</div></div>
+      $('#myth').innerHTML = `<div class="myth"><div class="game"><span class="mark x" aria-hidden="true">✗</span><b>IN GAME 遊戲裡的想法</b><span class="mt">${esc(m.myth.game)}</span><span class="tag-no">✗ 現實中不能這樣</span></div><div class="real"><span class="mark o" aria-hidden="true">✓</span><b>IN REAL LIFE 現實中要這樣</b><span class="mt">${esc(m.myth.real)}</span><span class="tag-yes">✓ 正確做法</span></div></div>
         <p class="note">你也可以想一張自己的破解卡，說給家人聽。</p>`;
     };
     $('#replay').onclick = () => show('brief', m);
