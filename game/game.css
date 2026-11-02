@@ -582,3 +582,12 @@ textarea#notein { width: 100%; background: #070a09; color: #fff; border: 1px sol
   .title-hero { grid-template-columns: 1fr; }
 }
 @media (max-height: 760px) and (min-width: 820px) { .title-hero .lead { font-size: 16px; } .title-grid { margin-top: 10px; } }
+
+/* 關鍵卡小約定：標籤不換行，填寫線接在後面並對齊底線 */
+.promise .cc-row { align-items: flex-end; gap: 6px; }
+.promise .cc-row b { width: auto; flex: none; white-space: nowrap; }
+@media print {
+  .print-poster #poster .promise .cc-row { align-items: flex-end; gap: 6px; }
+  .print-poster #poster .promise .cc-row b { width: auto; flex: none; white-space: nowrap; margin: 0; }
+  .print-poster #poster .promise .cc-line { flex: 1 1 auto; min-width: 40px; }
+}
