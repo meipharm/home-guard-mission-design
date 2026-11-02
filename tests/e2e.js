@@ -231,6 +231,25 @@ window.runE2E = async function () {  const R = [];
   ok('設定：音效、語音、動畫可切換', ['st-sfx', 'st-amb', 'st-mute', 'st-calm'].every(id => (HG.show('hub'), q('#' + id))));
   HG.S.set.calm = true; ctx.win.document.body.classList.add('calm'); ok('降低動畫模式可開啟', ctx.doc.body.classList.contains('calm')); ctx.doc.body.classList.remove('calm');
 
+  // ===== 列印：只留要印的卡片、不佔其他版面、各自一頁內（模擬 A4 可列印尺寸 733×1062） =====
+  { const f = ctx.f, d = ctx.doc;
+    f.style.width = '733px'; f.style.height = '1062px';
+    let css = '';
+    for (const sh of d.styleSheets) { for (const r of sh.cssRules) { if (r.type === ctx.win.CSSRule.MEDIA_RULE && r.media.mediaText.includes('print')) css += [...r.cssRules].map(x => x.cssText).join(String.fromCharCode(10)); } }
+    const st = d.createElement('style'); st.textContent = css; d.head.appendChild(st);
+    const bagIds = HG.ITEMS.filter(i => !i.hidden).slice(0, 14).map(i => i.id);
+    for (const which of ['poster', 'stamps', 'bag']) {
+      if (which === 'poster') HG.show('card'); else if (which === 'stamps') HG.show('stamps'); else { HG.S.loadout = bagIds; HG.show('hub'); }
+      const cleanup = HG.preparePrint(which, which === 'bag' ? HG.bagCardHTML() : undefined);
+      const hid = ['header', 'main', 'footer'].every(t => ctx.win.getComputedStyle(d.querySelector(t)).display === 'none');
+      const h = d.documentElement.scrollHeight;
+      ok('列印 ' + which + '：其餘頁面內容不顯示、不佔版面（避免空白頁）', hid && !!d.getElementById('printroot') && d.getElementById('printroot').children.length > 0);
+      ok('列印 ' + which + '：剛好一頁以內（高度 ' + h + ' / 1062）', h <= 1064, h);
+      cleanup();
+      ok('列印 ' + which + '：列印後還原，不留下列印區', !d.getElementById('printroot') && !d.body.classList.contains('printing'));
+    }
+    st.remove(); f.style.width = '1000px'; f.style.height = '700px'; HG.show('hub'); }
+
   // ===== 3. 版面（各寬度無水平溢出） =====
   const errs = [].concat(ctx.win.__errs);
   ctx.f.remove();

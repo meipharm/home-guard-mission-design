@@ -450,7 +450,7 @@
           <h1>先保護自己，<br>再幫助別人</h1>
           <p class="lead">地震、火災、淹水、防空警報、與家人走散。完成六個任務，學會辨識危險、保護自己、知道何時怎麼求救。這是防災教育模擬，不是正式救護訓練。</p>
           <p class="en" style="color:var(--green);letter-spacing:2px;margin:0">Stay calm. Stay safe. ${sayBtns('Stay calm.')}</p>
-          <div class="row"><button type="button" class="btn big" id="start">▶ 進入演習基地</button><span class="note">先在右邊填呼號（可以先不改），再按這裡。</span></div>
+          <div class="row"><button type="button" class="btn big" id="start">▶︎ 進入演習基地</button><span class="note">先在右邊填呼號（可以先不改），再按這裡。</span></div>
         </div>
         ${EMBLEM}
       </section>
@@ -574,7 +574,7 @@
   // 補充教學影片：只放連結（點選後在新分頁開啟，需要連網），不內嵌播放器，遊戲本身維持離線
   const videoCard = m => m.video ? `
     <div class="panel video"><strong>補充教學影片（點選觀看，需要連網）</strong>
-      <p style="margin:6px 0"><a class="btn ghost" href="${esc(m.video.url)}" target="_blank" rel="noopener">▶ ${esc(m.video.title)}</a></p>
+      <p style="margin:6px 0"><a class="btn ghost" href="${esc(m.video.url)}" target="_blank" rel="noopener">▶︎ ${esc(m.video.title)}</a></p>
       <p class="note" style="margin:0">${esc(m.video.org)}｜${esc(m.video.len)}｜在新分頁開啟 YouTube。建議家長先看過，再陪孩子一起看；影片是補充，不取代實體急救課程，也不要在真人身上練習綁緊。</p></div>` : '';
 
   const gearList = (m, withAlt) => m.gear.length ? `<ul class="gear">${m.gear.map(g => {
@@ -591,7 +591,7 @@
     app.innerHTML = `
       <p class="eyebrow">${m.code} // ${m.kind === 'extra' ? 'FAMILY PRACTICE' : 'MISSION BRIEFING'}</p>
       <h1 class="with-icon"><span class="m-icon big">${mIcon(m)}</span>${esc(m.name)}</h1>
-      <div class="start-top"><button type="button" class="btn big" id="go2">▶ 開始任務</button><span class="note">準備好了就按這裡開始；下面是這關的流程、裝備和單字。</span></div>
+      <div class="start-top"><button type="button" class="btn big" id="go2">▶︎ 開始任務</button><span class="note">準備好了就按這裡開始；下面是這關的流程、裝備和單字。</span></div>
       <div class="viewport preview">${m.gobag ? wrap(SC.bag(null)) : sceneHTML(m, null, m.steps[0])}</div>
       <div class="panel"><p class="radio" style="margin:0"><span class="who">隊長</span>${esc(S.callsign)}，${esc(m.brief)}</p></div>
       ${m.note ? `<div class="callout amber">${esc(m.note)}</div>` : ''}
@@ -604,7 +604,7 @@
       <p>這關的英文單字：</p>
       <div class="opts">${m.words.map(w => `<div>${wordChip(w)} <span class="note">${esc(WORDS[w].zh)}</span></div>`).join('')}</div>
       ${parentCard(m)}
-      <div class="startbar"><button type="button" class="btn big" id="go">▶ 開始任務</button><button type="button" class="btn ghost" data-go="hub">回演習基地</button></div>`;
+      <div class="startbar"><button type="button" class="btn big" id="go">▶︎ 開始任務</button><button type="button" class="btn ghost" data-go="hub">回演習基地</button></div>`;
     const go = $('#go'), go2 = $('#go2'), ok = $('#g-ok');
     if (ok) {
       const sync = () => { go.disabled = go2.disabled = !ok.checked; };
@@ -656,14 +656,7 @@
       <p class="bc-src">依臺灣全民安全指引：標示物品有效日期、每半年檢查。內容請依家人需求調整；處方藥、證件、現金等請家長準備與保管。</p>
     </div>`;
   }
-  function printBag() {
-    const old = document.getElementById('bagcard'); if (old) old.remove();
-    document.body.insertAdjacentHTML('beforeend', bagCardHTML());
-    document.body.classList.add('print-bag');
-    const done = () => { document.body.classList.remove('print-bag'); const c = document.getElementById('bagcard'); if (c) c.remove(); window.removeEventListener('afterprint', done); };
-    window.addEventListener('afterprint', done);
-    try { window.print(); } catch (e) { done(); toast('這個瀏覽器無法開啟列印視窗。'); }
-  }
+  function printBag() { runPrint('bag', bagCardHTML()); }
 
   // ---------- 防災包整備 ----------
   ROUTES.gobag = function (m, checked) {
@@ -749,7 +742,7 @@
         <div class="hud-bottom"><div class="pack-mini" aria-label="防災包">${pack}</div>
           <p class="radio" aria-live="polite" style="margin:0">${CAPTAIN}<span class="who">隊長</span>${esc(st.radio)}</p></div>
         <div class="action${c.solved ? ' solved' : ''}"><p class="prompt sr-only">${esc(st.prompt)}</p><div id="ctl"></div><div id="fb" aria-live="polite"></div>
-          <div class="row hintrow"><button type="button" class="say big" id="hintbtn">需要提示</button>${m.video ? `<a class="say big" href="${esc(m.video.url)}" target="_blank" rel="noopener">▶ 補充影片</a>` : ''}<span class="note safe">安全提醒：${esc(m.safety)}</span></div></div>
+          <div class="row hintrow"><button type="button" class="say big" id="hintbtn">需要提示</button>${m.video ? `<a class="say big" href="${esc(m.video.url)}" target="_blank" rel="noopener">▶︎ 補充影片</a>` : ''}<span class="note safe">安全提醒：${esc(m.safety)}</span></div></div>
       </div>
       ${parentCard(m)}
       <div class="row"><button type="button" class="btn ghost" id="quit">暫停，回演習基地</button></div>`;
@@ -1030,12 +1023,24 @@
   // 關鍵卡的小約定：集結點會帶入遊戲中選的地點（只是地點名稱）；電話、稱呼等請列印後手寫，網頁不輸入
   const lineV = (l, v) => `<div class="cc-row"><b>${l}</b><span class="cc-line">${esc(v || '')}</span></div>`;
 
-  function printArea(which) {
-    document.body.classList.add('print-' + which);
-    const done = () => { document.body.classList.remove('print-' + which); window.removeEventListener('afterprint', done); };
+  // 列印準備：把要印的卡片複製到獨立的列印區（#printroot），列印時其餘內容整個不顯示、不佔版面，
+  // 這樣不會多出空白頁（手機 Safari 尤其明顯）。回傳還原用的函式。
+  function preparePrint(which, html) {
+    const old = document.getElementById('printroot'); if (old) old.remove();
+    const root = document.createElement('div'); root.id = 'printroot';
+    if (html) root.innerHTML = html;
+    else { const el = document.getElementById(which === 'poster' ? 'poster' : 'stampcard'); root.innerHTML = el ? el.outerHTML : ''; }
+    document.body.appendChild(root);
+    document.body.classList.add('printing', 'print-' + which);
+    return () => { document.body.classList.remove('printing', 'print-' + which); root.remove(); };
+  }
+  function runPrint(which, html) {
+    const cleanup = preparePrint(which, html);
+    const done = () => { cleanup(); window.removeEventListener('afterprint', done); };
     window.addEventListener('afterprint', done);
     try { window.print(); } catch (e) { done(); toast('這個瀏覽器無法開啟列印視窗。'); }
   }
+  const printArea = which => runPrint(which);
 
   // 關鍵卡的重點：把第一段關鍵句加粗（到第一個「：」或「，」為止），一眼抓到重點
   const lead = t => { const i = t.search(/[：，]/); return i > 0 && i < 20 ? `<strong>${esc(t.slice(0, i))}</strong>${esc(t.slice(i))}` : `<strong>${esc(t)}</strong>`; };
@@ -1096,7 +1101,7 @@
       <div class="row"><button type="button" class="btn" data-go="hub">回演習基地</button></div>`;
   };
 
-  window.HG = { S, show, store, MISSIONS, ITEMS, WORDS, ROUTES, ambKind: () => ambKind, bagCardHTML };
+  window.HG = { S, show, store, MISSIONS, ITEMS, WORDS, ROUTES, ambKind: () => ambKind, bagCardHTML, preparePrint };
   applySettings();
   show('title');
 })();
