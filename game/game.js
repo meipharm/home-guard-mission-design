@@ -491,6 +491,7 @@
     app.innerHTML = `
       <p class="eyebrow">${m.code} // ${m.kind === 'extra' ? 'FAMILY PRACTICE' : 'MISSION BRIEFING'}</p>
       <h1 class="with-icon"><span class="m-icon big">${mIcon(m)}</span>${esc(m.name)}</h1>
+      <div class="start-top"><button type="button" class="btn big" id="go2">▶ 開始任務</button><span class="note">準備好了就按這裡開始；下面是這關的流程、裝備和單字。</span></div>
       <div class="viewport preview">${m.gobag ? bagScene(null) : sceneHTML(m, null, m.steps[0])}</div>
       <div class="panel"><p class="radio" style="margin:0"><span class="who">隊長</span>${esc(S.callsign)}，${esc(m.brief)}</p></div>
       ${m.note ? `<div class="callout amber">${esc(m.note)}</div>` : ''}
@@ -503,15 +504,15 @@
       <p>這關的英文單字：</p>
       <div class="opts">${m.words.map(w => `<div>${wordChip(w)} <span class="note">${esc(WORDS[w].zh)}</span></div>`).join('')}</div>
       ${parentCard(m)}
-      <div class="row"><button type="button" class="btn" id="go">開始</button><button type="button" class="btn ghost" data-go="hub">回演習基地</button></div>`;
-    const go = $('#go'), ok = $('#g-ok');
+      <div class="startbar"><button type="button" class="btn big" id="go">▶ 開始任務</button><button type="button" class="btn ghost" data-go="hub">回演習基地</button></div>`;
+    const go = $('#go'), go2 = $('#go2'), ok = $('#g-ok');
     if (ok) {
-      const sync = () => { go.disabled = !ok.checked; };
+      const sync = () => { go.disabled = go2.disabled = !ok.checked; };
       ok.onchange = sync;
       $('#g-bleed').onchange = e => { S.set.showBleed = e.target.checked; save(); };
       sync();
     }
-    go.onclick = () => {
+    go.onclick = go2.onclick = () => {
       if (m.gobag) { show('gobag', m); return; }
       startRun(m);
     };
