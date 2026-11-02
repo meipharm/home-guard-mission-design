@@ -665,3 +665,9 @@ p, li, .note, .lead, .mission-card .note, .fb, .radio, .opt { text-wrap: pretty;
 /* 呼號放在標題區、開始按鈕正上方 */
 .hero-cs { margin: 10px 0 0; }
 .hero-cs input { width: 170px; }
+
+/* 輸出 PDF 一律只有一頁：列印區高度鎖在 A4 可印範圍內，超出的部分不另起新頁 */
+@media print {
+  body.printing #printroot { max-height: 280mm; overflow: hidden; break-inside: avoid; page-break-after: avoid; page-break-inside: avoid; }
+  body.printing, html:has(body.printing) { height: auto; }
+}
