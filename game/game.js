@@ -473,7 +473,7 @@
       <div class="stamps">${MAIN.map(m => {
         const got = !!S.done[m.id];
         return `<div class="stamp ${got ? 'got' : ''} ${newId === m.id ? 'new' : ''}" title="${esc(m.name)}">
-          <span class="s-no">${m.no}</span><span class="s-ic">${mIcon(m)}</span>
+          <span class="s-no">${m.no}</span>${got ? '<span class="s-star" aria-hidden="true">★</span>' : ''}<span class="s-ic">${mIcon(m)}</span>
           <span class="s-badge">${got ? esc(m.badge) : '？'}</span>${mini ? '' : `<span class="s-name">${esc(m.name.split('：')[0])}</span>`}
           <span class="s-mark">${got ? '已蓋章' : '未完成'}</span></div>`;
       }).join('')}</div>
