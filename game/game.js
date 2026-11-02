@@ -31,14 +31,20 @@
     done: store.get('done', {}),
     said: new Set(store.get('said', [])),
     fam: store.get('family', {}),
+    times: store.get('times', {}),        // 每關第一次完成花的秒數
+    doneAt: store.get('doneAt', {}),      // 每關第一次完成的時間點
+    note: store.get('note', ''),          // 孩子寫的心得（只存在本機）
+    timing: null,
     heard: new Set(),
     points: [],
     vocabFilter: 'all',
     family: { first: '', second: '', contact: '' },
     cur: null,
   };
-  const save = () => { store.set('settings', S.set); store.set('loadout', S.loadout); store.set('done', S.done); store.set('said', [...S.said]); store.set('family', S.fam); };
+  const save = () => { store.set('settings', S.set); store.set('loadout', S.loadout); store.set('done', S.done); store.set('said', [...S.said]); store.set('family', S.fam); store.set('times', S.times); store.set('doneAt', S.doneAt); store.set('note', S.note); };
   const applySettings = () => document.body.classList.toggle('calm', !!S.set.calm);
+  // 計時：從按下「開始任務」起，只累計頁面在前景的時間（切到別的分頁不算）
+  setInterval(() => { if (S.timing && !document.hidden) S.timing.sec++; }, 1000);
 
   const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const svg24 = body => `<svg viewBox="0 0 24 24" aria-hidden="true">${body}</svg>`;
@@ -426,10 +432,10 @@
   // =====================================================================
   const settingsPanel = () => `
     <div class="panel settings"><strong>設定</strong>
-      <label class="check"><input id="st-sfx" type="checkbox" ${S.set.sfx ? 'checked' : ''}> 提示音效（答對、答錯、找到東西時的柔和短音）</label>
-      <label class="check"><input id="st-amb" type="checkbox" ${S.set.amb ? 'checked' : ''}> 情境環境音（地震的低沉震動、雨聲、遠處提示音…，音量很小）</label>
-      <label class="check"><input id="st-mute" type="checkbox" ${S.set.mute ? 'checked' : ''}> 關閉語音朗讀（英文發音會安靜）</label>
-      <label class="check"><input id="st-calm" type="checkbox" ${S.set.calm ? 'checked' : ''}> 降低動畫（不搖晃、不漂移）</label>
+      <label class="check" title="答對、答錯、找到東西時的柔和短音"><input id="st-sfx" type="checkbox" ${S.set.sfx ? 'checked' : ''}> 提示音效</label>
+      <label class="check" title="地震的低沉震動、雨聲、遠處提示音等，音量很小"><input id="st-amb" type="checkbox" ${S.set.amb ? 'checked' : ''}> 情境環境音</label>
+      <label class="check" title="勾選後，英文發音按鈕會安靜"><input id="st-mute" type="checkbox" ${S.set.mute ? 'checked' : ''}> 關閉英文語音</label>
+      <label class="check" title="不搖晃、不漂移"><input id="st-calm" type="checkbox" ${S.set.calm ? 'checked' : ''}> 降低動畫</label>
     </div>`;
   function bindSettings() {
     const map = { 'st-sfx': 'sfx', 'st-amb': 'amb', 'st-mute': 'mute', 'st-calm': 'calm', 'st-parent': 'parent', 'st-bleed': 'showBleed' };
@@ -444,39 +450,87 @@
           <h1>先保護自己，<br>再幫助別人</h1>
           <p class="lead">地震、火災、淹水、防空警報、與家人走散。完成六個任務，學會辨識危險、保護自己、知道何時怎麼求救。這是防災教育模擬，不是正式救護訓練。</p>
           <p class="en" style="color:var(--green);letter-spacing:2px;margin:0">Stay calm. Stay safe. ${sayBtns('Stay calm.')}</p>
+          <div class="row"><button type="button" class="btn big" id="start">▶ 進入演習基地</button><span class="note">先在右邊填呼號（可以先不改），再按這裡。</span></div>
         </div>
         ${EMBLEM}
       </section>
-      <div class="callout alert"><strong>出任務前請先讀：</strong>
-        <ul style="margin:4px 0 0">
-          <li>這是模擬演練，沒有真的警報，也不會真的撥打電話；防災與急救內容整理自公開資料，不代表任何機關認證。</li>
-          <li>真實遇到狀況：先保護自己，大聲叫大人，撥打 119（火災、救護）或 110（警察）。</li>
-          <li>本機只儲存勾選與關卡進度，不儲存姓名、住址或電話，也不會上傳。</li>
-        </ul>
-      </div>
-      <div class="panel">
-        <div class="field"><label for="cs">你的呼號</label><input id="cs" type="text" maxlength="12" value="${esc(S.callsign)}"><span class="note">請用暱稱或代號，不要用真實姓名。</span></div>
-        <p class="note" style="margin:6px 0 0">建議和家長一起玩。每一關都有給家長的小卡。</p>
-      </div>
-      ${settingsPanel()}
-      <div class="row"><button type="button" class="btn" id="start">進入演習基地</button></div>`;
+      <div class="title-grid">
+        <div class="callout alert"><strong>出任務前請先讀：</strong>
+          <ul style="margin:4px 0 0">
+            <li>這是模擬演練，沒有真的警報，也不會真的撥打電話；內容整理自公開資料，不代表任何機關認證。</li>
+            <li>真實遇到狀況：先保護自己，大聲叫大人，撥打 119（火災、救護）或 110（警察）。</li>
+            <li>本機只儲存勾選與關卡進度，不儲存姓名、住址或電話，也不會上傳。</li>
+          </ul>
+        </div>
+        <div class="title-side">
+          <div class="panel">
+            <div class="field"><label for="cs">你的呼號</label><input id="cs" type="text" maxlength="12" value="${esc(S.callsign)}"><span class="note">用暱稱或代號，不要用真實姓名。</span></div>
+            <p class="note" style="margin:4px 0 0">建議和家長一起玩，每一關都有給家長的小卡。</p>
+          </div>
+          ${settingsPanel()}
+        </div>
+      </div>`;
     bindSettings();
     $('#start').onclick = () => { S.callsign = $('#cs').value.trim() || '救援一號'; show('hub'); };
   };
 
-  // 徽章集點卡：每關一格，完成就蓋章
+  // 新芽成長：完成越多，小芽越長越高，最後開花（家庭檢查表與演習基地共用）
+  const growthStage = (n, total) => n <= 0 ? 0 : n >= total ? 5 : Math.min(4, 1 + Math.floor(n * 4 / total));
+  const GROW_TEXT = ['種子還在土裡，完成一項，讓它發芽！', '冒出小芽了，繼續加油！', '長出新葉子了！', '小芽越長越高，快要長花苞了！', '花苞冒出來了，就差一點點！', '開花了！你是防災小勇士 🎉'];
+  function growthSVG(n, total) {
+    const st = growthStage(n, total), g = '#3ddc84', g2 = '#2a9d5c';
+    const top = 118 - [0, 20, 40, 58, 70, 76][st];
+    const lf = (y, w) => `<ellipse cx="${80 - w}" cy="${y}" rx="${w * 0.9}" ry="${w * 0.42}" fill="${g}" transform="rotate(-28 ${80 - w} ${y})"/><ellipse cx="${80 + w}" cy="${y}" rx="${w * 0.9}" ry="${w * 0.42}" fill="${g}" transform="rotate(28 ${80 + w} ${y})"/>`;
+    let s = `<ellipse cx="80" cy="146" rx="46" ry="5" fill="#000" opacity=".35"/><path d="M50 120h60l-8 26H58z" fill="#b8673a"/><rect x="46" y="114" width="68" height="9" rx="3" fill="#cd7b4a"/><ellipse cx="80" cy="115" rx="32" ry="4" fill="#6b4a2b"/>`;
+    if (st === 0) s += '<ellipse cx="80" cy="113" rx="5" ry="3.5" fill="#d9b36a"/>';
+    if (st >= 1) s += `<path d="M80 116V${top}" stroke="${g2}" stroke-width="5" stroke-linecap="round" fill="none"/>` + lf(top + 6, 9);
+    if (st >= 2) s += lf(top + 22, 13);
+    if (st >= 3) s += lf(top + 38, 16);
+    if (st === 4) s += `<ellipse cx="80" cy="${top - 7}" rx="8" ry="11" fill="#9bd86a"/><path d="M80 ${top - 18}q-4 8 0 14" stroke="#f2b33d" stroke-width="3" fill="none"/>`;
+    if (st === 5) {
+      const cy = top - 6;
+      s += [0, 72, 144, 216, 288].map(a => `<ellipse cx="80" cy="${cy - 13}" rx="8" ry="13" fill="#f2b33d" transform="rotate(${a} 80 ${cy})"/>`).join('') + `<circle cx="80" cy="${cy}" r="8" fill="#e8590c"/>`
+        + '<text x="34" y="52" fill="#f2b33d" font-size="18">✦</text><text x="120" y="40" fill="#f2b33d" font-size="14">✦</text><text x="124" y="84" fill="#3ddc84" font-size="16">★</text><text x="26" y="96" fill="#3ddc84" font-size="12">✦</text>';
+    }
+    return s;
+  }
+  const growthBlock = (n, total, label, mini) => {
+    const st = growthStage(n, total);
+    return `<div class="growth ${mini ? 'mini' : ''}" data-stage="${st}"><svg viewBox="0 0 160 150" role="img" aria-label="新芽成長圖：第 ${st} 階段，共 5 階段">${growthSVG(n, total)}</svg>
+      <div class="growth-t"><strong>${esc(label)} ${n} / ${total}</strong><div class="progress" aria-label="完成進度"><i style="width:${Math.round(n / total * 100)}%"></i></div><p>${GROW_TEXT[st]}</p></div></div>`;
+  };
+
+  // 徽章集點卡：每關一格，完成就蓋章；完整版另有隊員呼號、通關日期、通關總時間與心得
+  const pad2 = n => String(n).padStart(2, '0');
+  const fmtDate = ts => { const d = new Date(ts); return `${d.getFullYear()}/${pad2(d.getMonth() + 1)}/${pad2(d.getDate())}`; };
+  const fmtShort = ts => { const d = new Date(ts); return `${pad2(d.getMonth() + 1)}/${pad2(d.getDate())}`; };
+  const fmtDur = s => (typeof s !== 'number') ? '—' : s < 60 ? `${s} 秒` : s < 3600 ? `${Math.floor(s / 60)} 分 ${pad2(s % 60)} 秒` : `${Math.floor(s / 3600)} 小時 ${pad2(Math.floor(s % 3600 / 60))} 分`;
+  function clearInfo() {
+    const ids = MAIN.map(m => m.id), all = ids.every(id => S.done[id]);
+    const secs = ids.filter(id => S.done[id] && typeof S.times[id] === 'number').map(id => S.times[id]);
+    const last = Math.max(0, ...ids.map(id => S.doneAt[id] || 0));
+    return { all, total: secs.reduce((x, y) => x + y, 0), hasTime: secs.length > 0, date: all && last ? fmtDate(last) : null };
+  }
   function stampCard(newId, mini) {
-    const n = doneCount();
-    return `<div id="stampcard" class="stampcard ${mini ? 'mini' : ''}" aria-label="徽章集點卡，已蓋 ${n} 枚">
-      ${mini ? '' : `<p class="eyebrow">HOME GUARD // 徽章集點卡</p><h3>防災探索隊員集點卡</h3>`}
-      <div class="stamps">${MAIN.map(m => {
-        const got = !!S.done[m.id];
-        return `<div class="stamp ${got ? 'got' : ''} ${newId === m.id ? 'new' : ''}" title="${esc(m.name)}">
+    const n = doneCount(), info = clearInfo();
+    const head = mini ? '' : `<p class="eyebrow">HOME GUARD // 徽章集點卡</p><h3>防災探索隊員集點卡</h3>
+      <div class="s-info">
+        <div><span>隊員呼號</span><b>${esc(S.callsign)}</b></div>
+        <div><span>通關日期</span><b>${info.date || '尚未通關'}</b></div>
+        <div><span>${info.all ? '通關總時間' : '累計時間（已完成的關卡）'}</span><b>${info.hasTime ? fmtDur(info.total) : '—'}</b></div>
+      </div>`;
+    const cells = MAIN.map(m => {
+      const got = !!S.done[m.id];
+      const when = (!mini && got && S.doneAt[m.id]) ? `<span class="s-when">${fmtShort(S.doneAt[m.id])}${typeof S.times[m.id] === 'number' ? ' · ' + fmtDur(S.times[m.id]) : ''}</span>` : '';
+      return `<div class="stamp ${got ? 'got' : ''} ${newId === m.id ? 'new' : ''}" title="${esc(m.name)}">
           <span class="s-no">${m.no}</span>${got ? '<span class="s-star" aria-hidden="true">★</span>' : ''}<span class="s-ic">${mIcon(m)}</span>
-          <span class="s-badge">${got ? esc(m.badge) : '？'}</span>${mini ? '' : `<span class="s-name">${esc(m.name.split('：')[0])}</span>`}
+          <span class="s-badge">${got ? esc(m.badge) : '？'}</span>${mini ? '' : `<span class="s-name">${esc(m.name.split('：')[0])}</span>`}${when}
           <span class="s-mark">${got ? '已蓋章' : '未完成'}</span></div>`;
-      }).join('')}</div>
-      <p class="s-sum">已蓋 <strong>${n}</strong> / ${MAIN.length} 枚${n === MAIN.length ? '　🎉 恭喜成為防災探索隊員！' : ''}</p></div>`;
+    }).join('');
+    const note = mini ? '' : `<div class="s-note"><b>我的心得</b><div class="note-box" id="notebox">${esc(S.note)}</div></div>`;
+    return `<div id="stampcard" class="stampcard ${mini ? 'mini' : ''}" aria-label="徽章集點卡，已蓋 ${n} 枚">${head}
+      <div class="stamps">${cells}</div>
+      <p class="s-sum">已蓋 <strong>${n}</strong> / ${MAIN.length} 枚${n === MAIN.length ? '　🎉 恭喜成為防災探索隊員！' : ''}</p>${note}</div>`;
   }
 
   const card = m => `
@@ -491,13 +545,14 @@
       <p class="eyebrow">HOME BASE // 演習基地</p>
       <h1>六個任務，平日先練習</h1>
       <p class="lead">呼號 <strong>${esc(S.callsign)}</strong>，已完成 ${doneCount()} / ${MAIN.length} 關。可以照順序玩，也可以先挑想練習的。答錯不扣分，隊長會說明並讓你再選一次。</p>
-      <div class="progress" aria-label="完成進度"><i style="width:${Math.round(doneCount() / MAIN.length * 100)}%"></i></div>
-      ${stampCard(null, true)}
-      <div class="row"><button type="button" class="btn ghost" data-go="stamps">看完整集點卡</button></div>
+      <div class="hub-top">
+        ${growthBlock(doneCount(), MAIN.length, '已完成關卡', true)}
+        <div>${stampCard(null, true)}<div class="row" style="margin:6px 0 0"><button type="button" class="btn ghost" data-go="stamps">看完整集點卡</button></div></div>
+      </div>
       ${GROUPS.map(g => `<h2>${esc(g.t)}</h2><div class="missions">${g.ids.map(id => card(MBY[id])).join('')}</div>`).join('')}
       <h2>三、家庭防災練習</h2>
       <div class="missions">${card(MBY.p1)}
-        <button type="button" class="mission-card" data-go="family"><span class="mc-head"><span class="m-icon">${svg24('<path d="M5 4h14v16H5z"/><path d="M9 9l2 2 4-4M9 15h6"/>')}</span><span class="mc-titles"><span class="code">FAMILY</span><span class="mname">家庭防災檢查表與聯絡卡</span></span></span><span class="note">勾選 7 項家庭防災行動，列印空白的家庭緊急聯絡卡，讓家長手寫。</span></button></div>
+        <button type="button" class="mission-card" data-go="family"><span class="mc-head"><span class="m-icon">${svg24('<path d="M5 4h14v16H5z"/><path d="M9 9l2 2 4-4M9 15h6"/>')}</span><span class="mc-titles"><span class="code">FAMILY</span><span class="mname">家庭防災檢查表</span></span></span><span class="note">勾選 7 項家庭防災行動，確認全家都知道出口、集合地點和電話，讓小芽慢慢長大。</span></button></div>
       <div class="row">
         <button type="button" class="btn ghost" data-go="vocab">英文單字庫</button>
         <button type="button" class="btn ghost" data-go="card">防災關鍵卡</button>
@@ -558,6 +613,7 @@
       sync();
     }
     go.onclick = go2.onclick = () => {
+      S.timing = { id: m.id, sec: 0 };
       if (m.gobag) { show('gobag', m); return; }
       startRun(m);
     };
@@ -693,7 +749,11 @@
   }
   function next() {
     const c = S.cur;
-    if (c.i === c.list.length - 1) { S.done[c.m.id] = true; save(); show('debrief'); return; }
+    if (c.i === c.list.length - 1) {
+      S.done[c.m.id] = true;
+      if (!S.doneAt[c.m.id]) { S.doneAt[c.m.id] = Date.now(); if (S.timing && S.timing.id === c.m.id) S.times[c.m.id] = S.timing.sec; }
+      save(); show('debrief'); return;
+    }
     c.i++;
     Object.assign(c, { picked: new Set(), seq: 0, slot: 0, slotText: [], hint: false, solved: false, lastFb: '', lastKind: '' });
     if (c.list[c.i].type === 'hold') c.hold = 0;
@@ -913,28 +973,18 @@
       <p class="eyebrow">FAMILY // 家庭防災練習</p>
       <h1>家庭防災檢查表</h1>
       <p class="lead">和家人一起檢查，完成一項勾一項。勾選只存在這台裝置，不會上傳，也不需要輸入姓名、住址或電話。</p>
-      <div class="panel"><strong>已完成 ${n} / ${CHECKLIST.length}</strong><div class="progress"><i style="width:${Math.round(n / CHECKLIST.length * 100)}%"></i></div>
+      <div class="panel">${growthBlock(n, CHECKLIST.length, '已完成')}
         ${CHECKLIST.map(i => `<label class="check big"><input type="checkbox" data-c="${i.id}" ${S.fam[i.id] ? 'checked' : ''}> ${esc(i.t)}</label>`).join('')}
         <div class="row"><button type="button" class="btn ghost" id="creset">重設檢查表</button></div></div>
-      <h2>家庭緊急聯絡卡（空白）</h2>
-      <p class="note">請列印後，由家長用筆手寫。不要在網頁上輸入電話或地址。</p>
-      ${contactCard()}
-      <div class="row"><button type="button" class="btn" id="pc">列印聯絡卡</button><button type="button" class="btn ghost" data-m-go="p1">做居家安全檢查</button><button type="button" class="btn ghost" id="wipe">清除本機所有紀錄</button></div>`;
+      <p class="note">集結點、緊急聯絡人、電話等要寫下來的資訊，請到「防災關鍵卡」的<strong>家庭防災小約定</strong>，列印後由家長手寫。</p>
+      <div class="row"><button type="button" class="btn" data-go="card">到防災關鍵卡填寫小約定</button><button type="button" class="btn ghost" data-m-go="p1">做居家安全檢查</button><button type="button" class="btn ghost" id="wipe">清除本機所有紀錄</button></div>`;
     $$('[data-c]').forEach(b => b.onchange = () => { S.fam[b.dataset.c] = b.checked; save(); ROUTES.family(); });
     $('#creset').onclick = () => { S.fam = {}; save(); ROUTES.family(); };
-    $('#pc').onclick = () => printArea('contact');
     $('[data-m-go]').onclick = () => show('brief', MBY.p1);
-    $('#wipe').onclick = () => { ['settings', 'loadout', 'done', 'said', 'family'].forEach(k => store.remove(k)); S.done = {}; S.said = new Set(); S.fam = {}; S.loadout = []; toast('已清除這台裝置上的遊戲紀錄。'); ROUTES.family(); };
+    $('#wipe').onclick = () => { ['settings', 'loadout', 'done', 'said', 'family', 'times', 'doneAt', 'note'].forEach(k => store.remove(k)); S.done = {}; S.said = new Set(); S.fam = {}; S.loadout = []; S.times = {}; S.doneAt = {}; S.note = ''; toast('已清除這台裝置上的遊戲紀錄。'); ROUTES.family(); };
   };
-  const line = l => `<div class="cc-row"><b>${l}</b><span class="cc-line"></span></div>`;
   // 關鍵卡的小約定：集結點會帶入遊戲中選的地點（只是地點名稱）；電話、稱呼等請列印後手寫，網頁不輸入
   const lineV = (l, v) => `<div class="cc-row"><b>${l}</b><span class="cc-line">${esc(v || '')}</span></div>`;
-  const contactCard = () => `<div id="contact" class="poster a4 contact">
-    <p class="eyebrow">HOME GUARD // 家庭緊急聯絡卡</p><h3>家庭緊急聯絡卡</h3>
-    ${line('家長／照顧者 1　姓名與電話')}${line('家長／照顧者 2　姓名與電話')}${line('外地聯絡人　姓名與電話')}
-    ${line('第一集結點（家附近）')}${line('第二集結點（較遠）')}${line('學校避難集合地點')}${line('家中避難包放在')}${line('特別需求（過敏、藥物…）')}
-    <p class="cc-num"><b class="n119">119</b> 火災、緊急救護　<b class="n110">110</b> 警察</p>
-    <p class="note">電話打不通時傳簡訊；到了集結點就留下來等。內容請家長手寫，並放進防災包。</p></div>`;
 
   function printArea(which) {
     document.body.classList.add('print-' + which);
@@ -973,10 +1023,15 @@
     app.innerHTML = `
       <p class="eyebrow">STAMP CARD // 徽章集點卡</p>
       <h1>我的徽章集點卡</h1>
-      <p class="lead">每完成一關蓋一枚章，集滿 ${MAIN.length} 枚就是防災探索隊員！可以重玩任何一關，章不會消失。</p>
+      <p class="lead">每完成一關蓋一枚章，集滿 ${MAIN.length} 枚就是防災探索隊員！卡片上會記下隊員呼號、通關日期、通關總時間和你的心得。可以重玩任何一關，章不會消失。</p>
       ${stampCard(null, false)}
+      <div class="panel"><strong>✍ 我的心得</strong>
+        <p class="note">寫下學到了什麼、最有印象的一關。請不要寫真實姓名、住址或電話；心得只存在這台裝置，不會上傳。</p>
+        <textarea id="notein" maxlength="300" rows="4" placeholder="例如：我學到地震時要先趴下、掩護、穩住，不能衝樓梯…">${esc(S.note)}</textarea>
+        <p class="note"><span id="notecnt">${S.note.length}</span> / 300 字</p></div>
       <div class="grid2">${MAIN.map(m => `<p class="note"><strong>${m.no}. ${esc(m.badge)}</strong>：${esc(m.name)}</p>`).join('')}</div>
       <div class="row"><button type="button" class="btn" data-go="hub">回演習基地</button><button type="button" class="btn ghost" id="ps">列印集點卡</button></div>`;
+    $('#notein').oninput = e => { S.note = e.target.value.slice(0, 300); save(); $('#notebox').textContent = S.note; $('#notecnt').textContent = S.note.length; };
     $('#ps').onclick = () => printArea('stamps');
   };
 

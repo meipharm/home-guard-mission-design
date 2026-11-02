@@ -1,7 +1,6 @@
 // 瀏覽器實際操作測試：用 http 伺服器開啟 tests/e2e.html（例如 python -m http.server 後開 /tests/e2e.html）
 // 測試在 iframe 裡真的點擊遊戲；網址帶 ?test=1，使用獨立的儲存名稱，不會動到真正的進度。
-window.runE2E = async function () {
-  const R = [];
+window.runE2E = async function () {  const R = [];
   const ok = (n, c, d) => R.push({ n, ok: !!c, d: c ? '' : (d === undefined ? '' : String(d)) });
   const sleep = ms => new Promise(r => setTimeout(r, ms));
   const clearTest = () => { Object.keys(localStorage).filter(k => k.startsWith('hg.test.')).forEach(k => localStorage.removeItem(k)); };
@@ -184,12 +183,27 @@ window.runE2E = async function () {
 
   HG.show('family');
   ok('家庭檢查表 7 項', qa('[data-c]').length === 7);
+  ok('家庭檢查表：新芽成長圖（尚未勾選時是種子）', !!q('.growth') && q('.growth').dataset.stage === '0');
   q('[data-c="exit"]').checked = true; q('[data-c="exit"]').dispatchEvent(new ctx.win.Event('change'));
   ok('勾選存本機', JSON.parse(ctx.win.localStorage.getItem('hg.test.family')).exit === true);
+  ok('勾選後新芽長大', Number(q('.growth').dataset.stage) >= 1 && q('.growth-t p').textContent.length > 0);
+  qa('[data-c]').forEach(b => { b.checked = true; b.dispatchEvent(new ctx.win.Event('change')); });
+  ok('全部勾選後開花', q('.growth').dataset.stage === '5' && q('.growth-t').textContent.includes('開花'));
+  q('#creset').click();
+  q('[data-c="exit"]').checked = true; q('[data-c="exit"]').dispatchEvent(new ctx.win.Event('change'));
   ok('已完成 1/7', /1 \/ 7/.test(q('.panel strong').textContent));
   q('#creset').click(); ok('重設檢查表', !Object.values(HG.S.fam).some(Boolean));
-  ok('有空白聯絡卡', !!q('#contact') && qa('#contact .cc-line').length >= 8);
-  ok('聯絡卡不含輸入欄位', qa('#contact input').length === 0);
+  ok('家庭練習頁不再有重複的聯絡卡，改為指向防災關鍵卡的小約定', !q('#contact') && !q('#pc') && !!q('[data-go="card"]') && !q('main').textContent.includes('列印聯絡卡'));
+
+  // 集點卡：隊員呼號、通關日期、通關總時間、心得
+  HG.show('stamps');
+  ok('集點卡：隊員呼號', q('#stampcard .s-info').textContent.includes(HG.S.callsign));
+  ok('集點卡：通關日期（六關全部完成）', new RegExp('[0-9]{4}[/][0-9]{2}[/][0-9]{2}').test(q('#stampcard .s-info').textContent) && q('#stampcard .s-info').textContent.includes('通關日期'));
+  ok('集點卡：通關總時間', q('#stampcard .s-info').textContent.includes('通關總時間') && /秒|分/.test(q('#stampcard .s-info').textContent));
+  ok('每一關都記下第一次完成的時間與花費秒數', ['p2', 'm1', 'f1', 'w1', 'a1', 'p3'].every(id => typeof HG.S.times[id] === 'number' && HG.S.doneAt[id] > 0), JSON.stringify(HG.S.times));
+  ok('每枚已蓋章顯示日期與時間', qa('#stampcard .stamp.got .s-when').length === 6);
+  { const ta = q('#notein'); ta.value = '我學到地震要趴下'; ta.dispatchEvent(new ctx.win.Event('input')); ok('心得欄：輸入後即時顯示在卡片上', q('#notebox').textContent === '我學到地震要趴下'); ok('心得存在本機', ctx.win.localStorage.getItem('hg.test.note').includes('趴下')); }
+  ok('心得欄有字數限制與隱私提醒', q('#notein').maxLength === 300 && q('main').textContent.includes('不要寫真實姓名'));
 
   HG.show('card');
   ok('防災關鍵卡：六組孩子須知（六關各一組）', qa('#poster .kc').length === 6, qa('#poster .kc').length);

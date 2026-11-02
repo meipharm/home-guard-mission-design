@@ -534,3 +534,51 @@ button.slot.filled:hover { border-color: var(--alert); background: var(--alert-s
 .item-card .top { align-items: flex-start; }
 .item-card .word { gap: 6px; }
 .item-card .word .say { min-width: 44px; }
+
+/* 新芽成長：完成越多越長越大，最後開花 */
+.growth { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+.growth svg { width: 150px; height: 140px; flex: none; }
+.growth-t { flex: 1 1 240px; min-width: 0; }
+.growth-t strong { font-size: 18px; }
+.growth-t p { color: var(--amber); font-weight: bold; margin: 6px 0 0; }
+.growth.mini { margin: 6px 0 4px; } .growth.mini svg { width: 96px; height: 90px; }
+.growth[data-stage="5"] svg { filter: drop-shadow(0 0 12px rgba(242, 179, 61, 0.7)); }
+.growth .progress { margin: 6px 0; }
+
+/* 集點卡：隊員呼號、通關日期、通關總時間、心得 */
+.s-info { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 0 0 12px; text-align: left; }
+.s-info > div { border: 1px solid var(--green-dim); background: var(--green-soft); padding: 6px 10px; }
+.s-info span { display: block; font-size: 12px; color: var(--gray); }
+.s-info b { display: block; font-size: 17px; color: #fff; overflow-wrap: anywhere; }
+.stamp .s-when { font-size: 11px; color: var(--gray); font-family: var(--mono); }
+.s-note { margin-top: 12px; text-align: left; }
+.s-note > b { color: var(--green); }
+.note-box { min-height: 72px; border: 1.5px solid var(--green-dim); padding: 8px 10px; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 15px; background: rgba(0, 0, 0, 0.25); }
+textarea#notein { width: 100%; background: #070a09; color: #fff; border: 1px solid var(--green-dim); padding: 8px 10px; font: inherit; resize: vertical; min-height: 96px; }
+@media (max-width: 640px) { .s-info { grid-template-columns: 1fr; } }
+@media print {
+  .print-stamps #stampcard .s-info > div { background: #f0fdf4 !important; border: 1.5px solid #16a34a !important; }
+  .print-stamps #stampcard .s-info span { color: #4b5563 !important; } .print-stamps #stampcard .s-info b { color: #14532d !important; }
+  .print-stamps #stampcard .s-sum strong { color: #14532d !important; }
+  .print-stamps #stampcard .stamp .s-when { color: #166534 !important; }
+  .print-stamps #stampcard .s-note > b { color: #14532d !important; }
+  .print-stamps #stampcard .note-box { background: #fff !important; border: 1.5px solid #16a34a !important; color: #111 !important; min-height: 90px; }
+}
+
+/* 標題頁與演習基地：版面集中，不用上下拉來拉去 */
+.title-hero { padding: 20px 26px 22px; margin-top: 4px; grid-template-columns: 1fr 130px; }
+.title-hero h1 { font-size: 36px; margin: 4px 0; }
+.title-hero .lead { margin: 0 0 8px; font-size: 17px; }
+.title-hero .row { margin: 12px 0 0; }
+.title-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 14px; align-items: start; margin-top: 14px; }
+.title-grid .callout { margin: 0; }
+.title-side .panel { margin: 0 0 10px; }
+.title-side .settings { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14px; }
+.title-side .settings > strong { grid-column: 1 / -1; }
+.hub-top { display: grid; grid-template-columns: minmax(280px, 1fr) minmax(0, 1.4fr); gap: 16px; align-items: center; margin: 4px 0 8px; }
+@media (max-width: 819px) {
+  .title-grid, .hub-top { grid-template-columns: 1fr; }
+  .title-side .settings { grid-template-columns: 1fr; }
+  .title-hero { grid-template-columns: 1fr; }
+}
+@media (max-height: 760px) and (min-width: 820px) { .title-hero .lead { font-size: 16px; } .title-grid { margin-top: 10px; } }
