@@ -116,6 +116,31 @@ ol.steps li::before {
 .flow span { background: var(--panel-2); border: 1px solid var(--green-dim); color: var(--ink); padding: 4px 14px; font-size: 15px; clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%); }
 .flow i { color: var(--green); font-style: normal; }
 
+/* 任務卡片與圖示 */
+.mission { background: var(--panel); border: 1px solid var(--line); padding: 14px 18px; margin: 14px 0; }
+.mission header { display: flex; align-items: center; gap: 14px; }
+.mission h3 { margin: 0; color: #fff; font-size: 21px; }
+.mission .code { font-family: var(--mono); color: var(--green); letter-spacing: 2px; font-size: 13px; }
+.mission .words { margin: 0; }
+.m-icon { flex: none; display: inline-flex; width: 50px; height: 50px; align-items: center; justify-content: center; border: 1px solid var(--green-dim); background: var(--green-soft); }
+.m-icon svg { width: 32px; height: 32px; fill: none; stroke: var(--green); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+
+/* 時間軸：短項目橫向；長文字或手機直向 */
+.timeline { list-style: none; counter-reset: t; display: flex; padding: 0; margin: 14px 0 18px; }
+.timeline li { counter-increment: t; flex: 1 1 0; position: relative; text-align: center; padding: 0 6px; }
+.timeline li::before {
+  content: counter(t); position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px;
+  width: 34px; height: 34px; border-radius: 50%; background: #070a09; border: 2px solid var(--green); color: var(--green); font-family: var(--mono); font-weight: bold;
+  box-shadow: 0 0 10px rgba(61, 220, 132, 0.4);
+}
+.timeline li::after { content: ""; position: absolute; top: 17px; left: 50%; width: 100%; height: 2px; background: var(--green-dim); }
+.timeline li:last-child::after { display: none; }
+.timeline span { display: block; font-size: 15px; line-height: 1.45; }
+.timeline.vertical { flex-direction: column; }
+.timeline.vertical li { display: flex; align-items: flex-start; gap: 14px; text-align: left; padding: 0 0 16px; }
+.timeline.vertical li::before { margin: 0; flex: none; }
+.timeline.vertical li::after { top: 34px; left: 16px; width: 2px; height: calc(100% - 34px); }
+
 .quote { font-size: 22px; font-weight: 900; color: #fff; text-shadow: 0 0 16px rgba(61, 220, 132, 0.5); }
 .en { font-family: var(--mono); }
 
@@ -128,6 +153,10 @@ footer { text-align: center; color: var(--gray); font-size: 14px; padding: 16px;
 
 @media (max-width: 640px) {
   .site-header { position: static; }
+  .timeline { flex-direction: column; }
+  .timeline li { display: flex; align-items: center; gap: 12px; text-align: left; padding: 0 0 14px; }
+  .timeline li::before { margin: 0; flex: none; }
+  .timeline li::after { top: 34px; left: 16px; width: 2px; height: calc(100% - 34px); }
   h1 { font-size: 27px; }
   .hero { grid-template-columns: 1fr; padding: 22px 18px; }
   .hero h1 { font-size: 26px; }

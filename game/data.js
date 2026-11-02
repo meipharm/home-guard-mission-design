@@ -8,6 +8,7 @@ window.WORDS = {
   flashlight: { zh: '手電筒', syl: 'flash·light' },
   battery: { zh: '電池', syl: 'bat·ter·y' },
   whistle: { zh: '哨子', syl: 'whis·tle' },
+  radio: { zh: '收音機', syl: 'ra·di·o' },
   water: { zh: '水', syl: 'wa·ter' },
   marker: { zh: '麥克筆', syl: 'mark·er' },
   'emergency blanket': { zh: '急救毯', syl: 'e·mer·gen·cy blan·ket' },
@@ -69,17 +70,25 @@ window.SLOTS = 6;
 */
 window.MISSIONS = [
   {
-    id: 'm1', code: 'OP-01', name: '基地整備', badge: '整備官', scene: 'pack', words: ['water', 'flashlight', 'battery', 'whistle'],
-    brief: '颱風要來了，可能會停電、停水。隊長請你檢查家裡的避難包，確保全家準備好。',
-    parent: { learn: '居家韌性：平常準備避難包、約好集合點。', ask: '「如果現在停電，你知道手電筒放在哪裡嗎？」', hint: '先想想停電、沒有水的時候，最需要什麼。', real: '今晚一起打開家裡的避難包檢查，並約好家人走散時的集合點。' },
+    id: 'm1', code: 'OP-01', name: '颱風停電夜', badge: '黑夜守護者', scene: 'blackout', words: ['flashlight', 'battery', 'radio', 'whistle'],
+    icon: '<path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5V16h8v-2.5A6 6 0 0 0 12 3z"/><path d="M4 4l16 16"/>',
+    brief: '強颱來襲的晚上，窗外風雨很大，家裡突然停電，四周一片漆黑。用你在整備室準備的裝備，帶家人度過這一夜。',
+    flow: ['拿出手電筒照明', '不拿蠟燭走動', '待在室內聽官方消息', '走散就到集合點', '受困吹哨求救'],
+    parent: { learn: '停電與颱風夜的應變：安全照明、待在室內、約好集合點、受困求救。', ask: '「停電的時候，手電筒放在家裡哪裡？」', hint: '想想看，黑暗中最容易發生什麼危險？', real: '今晚一起找出家裡的手電筒和備用電池，並約好家人走散時的集合點。' },
     steps: [
-      { type: 'multi', radio: '隊員，先把避難包裝好。哪些東西應該放進去？', prompt: '選出應該放進避難包的東西（可以選很多個）',
-        options: [
-          { t: '飲用水', ok: true }, { t: '手電筒', ok: true }, { t: '備用電池', ok: true }, { t: '哨子', ok: true }, { t: '急救用品', ok: true },
-          { t: '遊戲機', fb: '停電時沒辦法充電，也不能救命。' }, { t: '一大疊漫畫', fb: '很重又佔空間，避難包要留給救命的東西。' },
-        ] },
       { type: 'item', need: 'flashlight', radio: '停電了！四周一片黑。', prompt: '從背包拿出可以照明的裝備',
         alt: '沒帶手電筒，先用手機的手電筒，但要省著用，手機還要拿來打電話。' },
+      { type: 'choice', radio: '家人想點蠟燭，拿著在家裡走來走去。', prompt: '你會怎麼建議？',
+        options: [
+          { t: '盡量用手電筒；蠟燭容易引起火災，不要拿著走動', ok: true, fb: '對！停電時用手電筒照明最安全。' },
+          { t: '多點幾根蠟燭，越亮越好', fb: '蠟燭倒了容易引起火災，停電時優先用手電筒。' },
+        ] },
+      { type: 'choice', radio: '大家都想知道颱風現在怎麼樣了。', prompt: '怎麼取得最新消息？',
+        options: [
+          { t: '待在室內，用電池收音機或手機聽官方消息', ok: true, fb: '對！颱風天外面有掉落物和強風，待在室內最安全。' },
+          { t: '到外面看看風有多大', fb: '颱風天外面有招牌、樹枝等掉落物，非常危險，要待在室內。' },
+          { t: '相信群組裡轉傳的消息', fb: '轉傳消息可能是錯的，要聽官方發布的消息。' },
+        ] },
       { type: 'choice', radio: '如果家人在混亂中走散了，該怎麼辦？', prompt: '選出最好的做法',
         options: [
           { t: '到全家事先約好的集合點', ok: true, fb: '對！事先約好地點，大家就知道去哪裡找彼此。' },
@@ -89,12 +98,14 @@ window.MISSIONS = [
       { type: 'item', need: 'whistle', radio: '假設你被困在房間裡，要讓救援人員知道你在這裡。', prompt: '從背包拿出求救用的裝備',
         alt: '沒帶哨子，可以用硬物敲打水管或牆壁，規律地敲，比一直大喊省力。' },
     ],
-    keyPoints: ['避難包要放水、手電筒、電池、哨子、急救用品', '全家要約好走散時的集合點', '受困時吹哨子求救，比大喊省力'],
+    keyPoints: ['停電先用手電筒，不拿蠟燭走動', '颱風天待在室內，聽官方消息', '全家約好集合點；受困時吹哨子求救'],
     myth: { game: '背包裡的東西隨時都有', real: '平常就要準備避難包，事情發生時才拿得到' },
   },
   {
     id: 'm2', code: 'OP-02', name: '地震應變', badge: '穩如磐石', scene: 'quake', words: ['earthquake', 'drop', 'cover', 'hold on'],
+    icon: '<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M12 9l-2 4 3 2-2 4"/>',
     brief: '你在客廳寫功課，地面突然劇烈搖晃，櫃子上的東西開始掉下來！',
+    flow: ['趴下 Drop', '掩護 Cover', '穩住 Hold on', '搖完先穿鞋', '聞到瓦斯：不開燈、開窗離開'],
     parent: { learn: '地震時「趴下、掩護、穩住」，搖完先穿鞋、注意瓦斯。', ask: '「我們家哪一張桌子最堅固，可以躲在下面？」', hint: '想想看，地震時最容易受傷的原因是什麼？（東西掉下來砸到）', real: '一起在家裡找出可以躲的堅固桌子，並把高處的重物移到低處。' },
     steps: [
       { type: 'sequence', radio: '地震！照正確順序保護自己！', prompt: '依照順序點選三個動作',
@@ -122,7 +133,9 @@ window.MISSIONS = [
   },
   {
     id: 'm3', code: 'OP-03', name: '防空警報', badge: '避難嚮導', scene: 'siren', words: ['siren', 'shelter'],
+    icon: '<path d="M7 18v-6a5 5 0 0 1 10 0v6"/><path d="M5 18h14v3H5z"/><path d="M12 2v2M4 6l1.5 1.5M20 6l-1.5 1.5"/>',
     brief: '一陣長長的警報聲響起，廣播說這是防空警報。',
+    flow: ['聽到警報', '跟大人到最近的避難處所', '遠離窗戶、保護頭部', '等官方宣布解除'],
     parent: { learn: '防空警報時就近進入避難處所，遠離窗戶，等官方解除。', ask: '「你知道我們家附近最近的避難處所在哪裡嗎？」', hint: '想想看，哪裡有厚厚的牆和天花板保護？', real: '一起查詢家裡和學校附近的避難處所（例如地下室、地下停車場），實際走一次。' },
     steps: [
       { type: 'choice', radio: '警報響了！', prompt: '第一個行動是什麼？',
@@ -152,7 +165,9 @@ window.MISSIONS = [
   },
   {
     id: 'm4', code: 'OP-04', name: '現場評估', badge: '安全偵察員', scene: 'kitchen', words: ['safe', 'help', 'call'],
+    icon: '<path d="M12 3l8 3v6c0 5-4 8-8 9-4-1-8-4-8-9V6z"/><path d="M8 12l3 3 5-6"/>',
     brief: '家人在廚房打破玻璃杯，手被割傷，地上都是碎玻璃。',
+    flow: ['停下來看環境', '穿鞋再靠近', '叫大人、撥 119', '說清楚地址和狀況', '等對方先掛電話'],
     parent: { learn: '先確認自己安全，再呼叫大人、撥 119 並說清楚。', ask: '「為什麼要先看地上有沒有玻璃，才能過去幫忙？」', hint: '如果救人的人也受傷了，會發生什麼事？', real: '一起練習說出家裡的完整地址，貼在電話旁邊。' },
     steps: [
       { type: 'choice', radio: '你聽到玻璃破掉的聲音，跑到廚房門口。', prompt: '第一步做什麼？',
@@ -181,7 +196,9 @@ window.MISSIONS = [
   },
   {
     id: 'm5', code: 'OP-05', name: '簡易包紮', badge: '包紮能手', scene: 'hand', words: ['gloves', 'gauze', 'press', 'bandage'], bleed: true,
+    icon: '<rect x="2" y="9" width="20" height="6" rx="3" transform="rotate(-45 12 12)"/><path d="M10.5 12h.01M13.5 12h.01M12 10.5h.01M12 13.5h.01"/>',
     brief: '家人的手掌被割傷，一直流血。大人在旁邊，請你協助止血。',
+    flow: ['戴手套保護自己', '紗布直接加壓', '濕了再加一層', '繃帶固定', '檢查手指顏色'],
     parent: { learn: '戴手套保護自己、直接加壓、紗布濕了再加一層、繃帶不要太緊。', ask: '「為什麼紗布濕了不要拿掉？」', hint: '血慢慢會凝固，拿掉紗布會發生什麼事？', real: '一起打開家裡的急救箱，認識紗布、繃帶、手套放在哪裡。' },
     steps: [
       { type: 'item', need: 'gloves', radio: '先保護自己！', prompt: '從背包拿出保護雙手的裝備',
@@ -207,7 +224,9 @@ window.MISSIONS = [
   },
   {
     id: 'm6', code: 'OP-06', name: '止血帶行動', badge: '止血專家', scene: 'leg', words: ['tourniquet', 'tighten', 'twist', 'lock', 'bleeding'], bleed: true,
+    icon: '<path d="M8 2v20M16 2v20"/><rect x="5" y="9" width="14" height="4" rx="1"/><path d="M12 5v12"/>',
     brief: '家人的大腿被重物劃傷，血一直湧出來，用力壓也壓不住。大人已經撥了 119。',
+    flow: ['判斷：壓不住才用', '綁在傷口上方', '轉絞棒到不流血', '固定絞棒', '寫下時間', '不鬆開，等救護'],
     note: '真實情況中，止血帶需要很大的力氣，通常由大人操作，你的任務是協助大人。這關練習的是步驟。',
     parent: { learn: '壓不住才用止血帶；綁在傷口上方、避開關節；轉到不流血、固定、寫時間、不自己鬆開。', ask: '「為什麼不能綁在膝蓋上？」', hint: '關節的地方有骨頭擋住，綁得緊嗎？', real: '如果家裡有止血帶，請大人示範一次；建議全家參加實體急救課程。' },
     steps: [

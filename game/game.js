@@ -117,8 +117,8 @@
     }).join('');
     app.innerHTML = `
       <p class="eyebrow">ARMORY // 整備室</p>
-      <h1>選擇你的裝備</h1>
-      <p class="lead">背包只有 ${SLOTS} 格。想一想：哪些任務會用到照明、求救、止血、包紮？任務之間可以回來換裝備。</p>
+      <h1>整理你的避難包</h1>
+      <p class="lead">背包只有 ${SLOTS} 格。想一想：停電、受困、包紮、止血各需要什麼？任務之間可以回來換裝備。</p>
       <div class="panel"><strong>背包（${S.loadout.length} / ${SLOTS}）</strong><div class="slots">${slots}</div></div>
       <div class="items">${ITEMS.map(it => `
         <div class="item-card ${S.loadout.includes(it.id) ? 'on' : ''}">
@@ -148,6 +148,7 @@
       <div class="missions">${MISSIONS.map(m => `
         <button type="button" class="mission-card ${S.done[m.id] ? 'done' : ''}" data-m="${m.id}">
           <span class="status">${S.done[m.id] ? '完成｜' + esc(m.badge) : '待執行'}</span>
+          <span class="m-icon">${mIcon(m)}</span>
           <span class="code">${m.code}</span>
           <span class="mname">${esc(m.name)}</span>
           <span class="note">${esc(m.brief)}</span>
@@ -161,6 +162,9 @@
     $$('[data-m]').forEach(b => b.onclick = () => show('brief', MISSIONS.find(m => m.id === b.dataset.m)));
   }
 
+  const mIcon = m => `<svg viewBox="0 0 24 24" aria-hidden="true">${m.icon}</svg>`;
+  const timeline = steps => `<ol class="timeline">${steps.map(s => `<li><span>${esc(s)}</span></li>`).join('')}</ol>`;
+
   const parentCard = m => `
     <details class="parent"><summary>家長小卡</summary><dl>
       <dt>這關在學什麼</dt><dd>${esc(m.parent.learn)}</dd>
@@ -173,9 +177,11 @@
   function renderBrief(m) {
     app.innerHTML = `
       <p class="eyebrow">${m.code} // MISSION BRIEFING</p>
-      <h1>${esc(m.name)}</h1>
+      <h1 class="with-icon"><span class="m-icon big">${mIcon(m)}</span>${esc(m.name)}</h1>
       <div class="panel"><p class="radio" style="margin:0"><span class="who">隊長</span>${esc(S.callsign)}，${esc(m.brief)}</p></div>
       ${m.note ? `<div class="callout amber">${esc(m.note)}</div>` : ''}
+      <h2>任務流程</h2>
+      ${timeline(m.flow)}
       <p>這關的英文單字：</p>
       <div class="opts">${m.words.map(w => `<div>${wordChip(w)} <span class="note">${esc(WORDS[w].zh)}</span></div>`).join('')}</div>
       ${parentCard(m)}
@@ -190,10 +196,15 @@
   function sceneSVG(c) {
     const G = '#3ddc84', D = '#2a6b49', R = '#ff5d52';
     const k = c.m.scene;
-    if (k === 'pack') return `<svg viewBox="0 0 400 200"><g fill="none" stroke="${G}" stroke-width="2.5">
-      <path d="M150 50 h100 a20 20 0 0 1 20 20 v100 h-140 v-100 a20 20 0 0 1 20-20z"/><path d="M175 50 v-14 h50 v14"/><rect x="160" y="110" width="80" height="40" rx="6"/>
-      <path d="M60 150 h40 v-50 l-20-20 l-20 20z" stroke="${D}"/><path d="M300 150 h50 M325 150 v-60 l-15-10 h30 l-15 10" stroke="${D}"/></g>
-      <text x="200" y="185" fill="${D}" font-family="Bahnschrift,Arial" font-size="12" text-anchor="middle">GO BAG CHECK</text></svg>`;
+    if (k === 'blackout') {
+      const lit = c.i > 0 || c.solved;
+      return `<svg viewBox="0 0 400 200">
+      <rect x="250" y="30" width="110" height="90" fill="#08100d" stroke="${D}" stroke-width="2.5"/><path d="M305 30 v90 M250 75 h110" stroke="${D}" stroke-width="2"/>
+      <path d="M262 40 l-8 22 M285 42 l-8 22 M318 44 l-8 22 M340 40 l-8 22 M272 82 l-8 22 M330 84 l-8 22" stroke="#4a6d8c" stroke-width="2"/>
+      <path d="M0 165 h400" stroke="${D}" stroke-width="2"/><path d="M40 165 v-60 h70 v60" fill="none" stroke="${D}" stroke-width="2"/>
+      ${lit ? `<path d="M120 150 L230 95 L230 185 Z" fill="rgba(255,240,170,0.18)"/><path d="M80 140 h28 l12-8 v24 l-12-8 h-28z" fill="none" stroke="${G}" stroke-width="2.5"/>` : ''}
+      <text x="200" y="22" fill="${lit ? G : R}" font-family="Bahnschrift,Arial" font-size="12" text-anchor="middle">${lit ? 'LIGHT ON' : 'POWER OUT'}</text></svg>`;
+    }
     if (k === 'quake') return `<svg viewBox="0 0 400 200"><g fill="none" stroke="${G}" stroke-width="2.5">
       <path d="M0 160 h400" stroke="${D}"/><path d="M120 110 h160 M135 110 v50 M265 110 v50"/><rect x="40" y="40" width="50" height="120" stroke="${D}"/>
       <path d="M55 60 h20 M55 90 h20" stroke="${D}"/><rect x="300" y="30" width="60" height="40" stroke="${D}"/>
@@ -410,8 +421,8 @@
       ${report ? `<div class="panel"><strong>無線電回報（英文）</strong><p class="en" style="font-size:20px;margin:4px 0">${report} ${sayBtns(report)}</p></div>` : ''}
       <h2>遊戲 vs 現實：破解卡</h2>
       <div id="myth"><button type="button" class="btn ghost" id="flip">翻開破解卡</button></div>
-      <h2>這關的重點</h2>
-      <ol>${m.keyPoints.map(k => `<li>${esc(k)}</li>`).join('')}</ol>
+      <h2>這關的流程回顧</h2>
+      ${timeline(m.flow)}
       ${c.missing.length ? `<div class="callout amber">這次背包裡沒有：${c.missing.map(id => esc(ITEM[id].name)).join('、')}，所以用了替代做法。下次出任務前，想想要不要帶上它。</div>` : ''}
       ${decoys.length ? `<div class="callout">你的背包裡有${decoys.map(id => esc(ITEM[id].name)).join('、')}。這次有用到嗎？</div>` : ''}
       <h2>和家長一起想三個問題</h2>

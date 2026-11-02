@@ -174,6 +174,25 @@ h2::before { content: ""; width: 6px; height: 22px; background: var(--green); bo
 .zone text { fill: var(--green); font-family: var(--mono); font-weight: bold; font-size: 18px; }
 .zone:focus { outline: none; }
 
+/* 任務圖示 */
+.m-icon { display: inline-flex; width: 44px; height: 44px; align-items: center; justify-content: center; border: 1px solid var(--green-dim); background: var(--green-soft); }
+.m-icon svg { width: 28px; height: 28px; fill: none; stroke: var(--green); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.m-icon.big { width: 56px; height: 56px; } .m-icon.big svg { width: 36px; height: 36px; }
+.mission-card .m-icon { float: left; margin: 2px 12px 4px 0; }
+.with-icon { display: flex; align-items: center; gap: 14px; }
+
+/* 時間軸：桌機橫向、手機直向 */
+.timeline { list-style: none; counter-reset: t; display: flex; padding: 0; margin: 12px 0 18px; }
+.timeline li { counter-increment: t; flex: 1 1 0; position: relative; text-align: center; padding: 0 6px; }
+.timeline li::before {
+  content: counter(t); position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px;
+  width: 34px; height: 34px; border-radius: 50%; background: #070a09; border: 2px solid var(--green); color: var(--green); font-family: var(--mono); font-weight: bold;
+  box-shadow: 0 0 10px rgba(61, 220, 132, 0.4);
+}
+.timeline li::after { content: ""; position: absolute; top: 17px; left: 50%; width: 100%; height: 2px; background: var(--green-dim); }
+.timeline li:last-child::after { display: none; }
+.timeline span { display: block; font-size: 15px; line-height: 1.45; }
+
 /* 家長小卡 */
 details.parent { margin-top: 14px; background: var(--panel); border: 1px solid var(--amber); }
 details.parent summary { cursor: pointer; padding: 8px 14px; color: var(--amber); font-weight: bold; }
@@ -217,6 +236,10 @@ th { background: var(--panel-2); color: var(--green); }
   .viewport { aspect-ratio: 16 / 10; }
   .myth { grid-template-columns: 1fr; }
   .pick { width: 80px; }
+  .timeline { flex-direction: column; }
+  .timeline li { display: flex; align-items: center; gap: 12px; text-align: left; padding: 0 0 14px; }
+  .timeline li::before { margin: 0; flex: none; }
+  .timeline li::after { top: 34px; left: 16px; width: 2px; height: calc(100% - 34px); }
 }
 
 @media print {
