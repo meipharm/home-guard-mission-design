@@ -168,7 +168,7 @@ h2::before { content: ""; width: 6px; height: 22px; background: var(--green); bo
 .opt.right::before { content: "✓ "; color: var(--green); font-weight: bold; }
 .opt.wrong { border-color: var(--alert); background: var(--alert-soft); }
 .opt.wrong::before { content: "✗ "; color: var(--alert); font-weight: bold; }
-.opt.dim { opacity: 0.45; text-decoration: line-through; }
+.opt.dim { opacity: 0.45; }
 .opt.picked { border-color: var(--green); background: var(--green-soft); }
 .opt:disabled { cursor: default; }
 .seq-done { display: grid; gap: 6px; margin-bottom: 10px; }
@@ -438,7 +438,7 @@ th { background: var(--panel-2); color: var(--green); }
 .myth .mark.x { color: var(--alert); border-color: var(--alert); } .myth .mark.o { color: var(--green); border-color: var(--green); }
 .myth .game b { color: #ffb3ac; } .myth .real b { color: var(--green); }
 .myth .mt { display: block; font-size: 18px; margin: 2px 0 6px; }
-.myth .game .mt { color: var(--gray); text-decoration: line-through; text-decoration-color: var(--alert); text-decoration-thickness: 2px; }
+.myth .game .mt { color: #ffe3df; font-weight: bold; }   /* 不畫刪除線，內容要看得清楚；錯誤由叉叉、紅框與標籤表示 */
 .myth .real .mt { color: #fff; font-weight: bold; }
 .myth .tag-no, .myth .tag-yes { display: inline-block; font-size: 13px; padding: 0 8px; border: 1px solid; }
 .myth .tag-no { color: var(--alert); } .myth .tag-yes { color: var(--green); }
