@@ -176,9 +176,20 @@
       <div class="panel" id="report"><strong>防災包檢查</strong>
         ${missNeed.length ? `<p>還缺 ${missNeed.length} 樣必備物品：</p><ul>${missNeed.map(it => `<li><strong>${esc(it.name)}</strong>：${esc(it.use)}</li>`).join('')}</ul>` : '<p>必備物品全部到齊！</p>'}
         ${decoys.length ? `<p>背包裡有${decoys.map(id => esc(ITEM[id].name)).join('、')}：${decoys.map(id => esc(ITEM[id].use)).join(' ')}</p>` : ''}
-        ${!S.loadout.includes('tourniquet') ? '<p class="note">提示：演習二會用到止血帶和麥克筆，空間夠的話可以加帶。</p>' : ''}
+        ${!S.loadout.includes('tourniquet') || !S.loadout.includes('pen') ? '<p class="note">提示：演習二會用到止血帶和紙筆，空間夠的話可以加帶。</p>' : ''}
+        <strong>防災包要放哪裡？</strong>
+        <ul class="tips">${BAG_TIPS.place.map(p => `<li class="${p.ok ? 'yes' : 'no'}">${p.ok ? '✓' : '✗'} ${esc(p.t)}</li>`).join('')}</ul>
+        <strong>背包怎麼選？</strong>
+        <ul>${BAG_TIPS.bag.map(t => `<li>${esc(t)}</li>`).join('')}</ul>
         <div class="row"><button type="button" class="btn" id="finish">完成整備</button><span class="note">還想調整可以繼續改，再按一次「檢查防災包」。</span></div>
       </div>` : '';
+    const group = cat => ITEMS.filter(it => it.cat === cat).map(it => `
+        <div class="item-card ${S.loadout.includes(it.id) ? 'on' : ''}">
+          ${it.need ? '<span class="pill need">必備</span>' : it.opt ? '<span class="pill opt">建議</span>' : ''}
+          <div class="top">${icon(it.id)}<div><div class="name">${esc(it.name)}</div>${it.word ? wordChip(it.word) : ''}</div></div>
+          <p class="use">${checked || !it.decoy ? esc(it.use) : '這個要帶嗎？想一想。'}</p>
+          <button type="button" class="toggle" data-item="${it.id}">${S.loadout.includes(it.id) ? '已放入（點一下拿出）' : '放進防災包'}</button>
+        </div>`).join('');
     app.innerHTML = `
       <p class="eyebrow">${m.code} // GO BAG</p>
       <h1 class="with-icon"><span class="m-icon big">${mIcon(m)}</span>整理我們家的防災包</h1>
@@ -186,14 +197,8 @@
       <div class="panel"><strong>防災包（${S.loadout.length} / ${SLOTS}）</strong><div class="slots">${slots}</div>
         <div class="row" style="margin-bottom:0"><button type="button" class="btn" id="check" ${S.loadout.length ? '' : 'disabled'}>檢查防災包</button></div></div>
       ${report}
-      <div class="items">${ITEMS.map(it => `
-        <div class="item-card ${S.loadout.includes(it.id) ? 'on' : ''}">
-          ${it.need ? '<span class="pill need">必備</span>' : it.opt ? '<span class="pill opt">建議</span>' : ''}
-          <div class="top">${icon(it.id)}<div><div class="name">${esc(it.name)}</div>${it.word ? wordChip(it.word) : ''}</div></div>
-          <p class="use">${checked || !it.decoy ? esc(it.use) : '這個要帶嗎？想一想。'}</p>
-          <button type="button" class="toggle" data-item="${it.id}">${S.loadout.includes(it.id) ? '已放入（點一下拿出）' : '放進防災包'}</button>
-        </div>`).join('')}
-      </div>
+      ${CATS.map((cat, i) => `<h2>${i < 4 ? `${i + 1}. ` : ''}${esc(cat)}</h2><div class="items">${group(cat)}</div>`).join('')}
+      <p class="note">清單參考：${SOURCES.map(s => `<a href="${s.url}" target="_blank" rel="noopener">${esc(s.name)}</a>`).join('、')}。「必備」與「建議」是本遊戲為孩子整理的優先順序，請依家人需要調整。</p>
       ${parentCard(m)}`;
     $$('[data-item]').forEach(b => b.onclick = () => {
       const id = b.dataset.item;

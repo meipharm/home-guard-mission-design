@@ -11,12 +11,16 @@ window.WORDS = {
   'first aid kit': { zh: '急救包', syl: 'first aid kit' },
   medicine: { zh: '藥品', syl: 'med·i·cine' },
   'ID card': { zh: '證件', syl: 'I·D card' },
-  cash: { zh: '現金', syl: 'cash' },
-  jacket: { zh: '外套', syl: 'jack·et' },
-  'emergency blanket': { zh: '急救毯', syl: 'e·mer·gen·cy blan·ket' },
+  'energy bar': { zh: '能量棒', syl: 'en·er·gy bar' },
+  tissue: { zh: '衛生紙', syl: 'tis·sue' },
+  raincoat: { zh: '雨衣', syl: 'rain·coat' },
+  map: { zh: '地圖', syl: 'map' },
+  blanket: { zh: '毯子', syl: 'blan·ket' },
+  gloves: { zh: '手套', syl: 'gloves' },
+  pen: { zh: '筆', syl: 'pen' },
+  'zip bag': { zh: '夾鏈袋', syl: 'zip bag' },
   mask: { zh: '口罩', syl: 'mask' },
   tourniquet: { zh: '止血帶', syl: 'tour·ni·quet' },
-  marker: { zh: '麥克筆', syl: 'mark·er' },
   'fire extinguisher': { zh: '滅火器', syl: 'fire ex·tin·guish·er' },
   'go bag': { zh: '防災包', syl: 'go bag' },
   'meeting point': { zh: '集結點', syl: 'meet·ing point' },
@@ -34,30 +38,52 @@ window.WORDS = {
   help: { zh: '幫忙、求救', syl: 'help' },
 };
 
-// 防災包物品：need 為必備，opt 為建議加帶，decoy 為干擾物品（選了不扣分，檢查時再討論）
+// 防災包物品：依臺北市政府消防局〈緊急避難包〉四大類整理，並參考黑熊學院〈先求有再求好，準備避難背包不用花大錢〉
+// need 為本遊戲的優先建議（必備），opt 為建議加帶，decoy 為干擾物品（選了不扣分，檢查時再說明）
+window.CATS = ['水和食物', '衛生用品', '生活防災用品', '照護用品', '其他'];
+
 window.ITEMS = [
-  { id: 'water', name: '飲用水', word: 'water', need: true, use: '停水或避難時喝，至少準備 3 天份。', icon: '<path d="M10 3h4v3l2 3v12H8V9l2-3z"/><path d="M8 13h8"/>' },
-  { id: 'food', name: '乾糧', word: 'food', need: true, use: '不用煮、不易壞的食物，例如餅乾、罐頭。', icon: '<rect x="6" y="5" width="12" height="15" rx="2"/><path d="M6 9h12M6 16h12"/>' },
-  { id: 'flashlight', name: '手電筒', word: 'flashlight', need: true, use: '停電或晚上照明，比蠟燭安全。', icon: '<path d="M3 9h10l4-3v12l-4-3H3z"/><path d="M19 9l2-1M19 15l2 1M19 12h2"/>' },
-  { id: 'battery', name: '備用電池', word: 'battery', need: true, use: '手電筒和收音機的電力。', icon: '<rect x="3" y="7" width="16" height="10" rx="1"/><rect x="19" y="10" width="2" height="4"/><path d="M7 12h4M9 10v4"/>' },
-  { id: 'radio', name: '收音機', word: 'radio', need: true, use: '停電、網路斷線時，收聽官方消息。', icon: '<rect x="3" y="9" width="18" height="11" rx="2"/><path d="M7 9l10-5"/><circle cx="15" cy="14.5" r="2.5"/><path d="M6 13h4M6 16h4"/>' },
-  { id: 'whistle', name: '哨子', word: 'whistle', need: true, use: '受困時吹哨求救，比大喊省力、傳得遠。', icon: '<circle cx="9" cy="14" r="5"/><path d="M12 10h9v4h-5"/>' },
-  { id: 'firstaid', name: '急救包', word: 'first aid kit', need: true, use: '紗布、繃帶、手套、消毒用品，處理傷口。', icon: '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5h6v2M12 10v7M8.5 13.5h7"/>' },
-  { id: 'medicine', name: '個人藥品', word: 'medicine', need: true, use: '家人每天要吃的藥，至少帶幾天份。', icon: '<rect x="3" y="9" width="18" height="7" rx="3.5" transform="rotate(-30 12 12.5)"/><path d="M10.5 8.5l3 7"/>' },
-  { id: 'idcopy', name: '證件影本', word: 'ID card', need: true, use: '身分證、健保卡影本，證明身分、就醫用。', icon: '<rect x="3" y="6" width="18" height="13" rx="2"/><circle cx="8.5" cy="12" r="2"/><path d="M13 10h5M13 14h4"/>' },
-  { id: 'jacket', name: '保暖衣物', word: 'jacket', need: true, use: '外套、雨衣，避免淋雨或失溫。', icon: '<path d="M8 3l4 3 4-3 5 4-3 3v11H6V10L3 7z"/><path d="M12 6v15"/>' },
-  { id: 'tourniquet', name: '止血帶', word: 'tourniquet', opt: true, use: '手或腳大量出血、壓不住時使用。', icon: '<rect x="3" y="9" width="18" height="6" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/>' },
-  { id: 'marker', name: '麥克筆', word: 'marker', opt: true, use: '記下綁止血帶的時間、留字條。', icon: '<path d="M4 20l3-1 11-11-2-2L5 17z"/><path d="M14 6l4 4"/>' },
-  { id: 'powerbank', name: '行動電源', word: 'power bank', opt: true, use: '幫手機充電，才能聯絡家人。', icon: '<rect x="6" y="3" width="12" height="18" rx="2"/><path d="M13 7l-3 5h4l-3 5"/>' },
-  { id: 'cash', name: '現金', word: 'cash', opt: true, use: '停電時無法刷卡，準備一些零錢和小鈔。', icon: '<rect x="2" y="7" width="20" height="11" rx="1"/><circle cx="12" cy="12.5" r="2.5"/>' },
-  { id: 'blanket', name: '急救毯', word: 'emergency blanket', opt: true, use: '很輕，可以保暖、避免失溫。', icon: '<path d="M4 6h16v12H4z"/><path d="M4 6l16 12M20 6L4 18"/>' },
-  { id: 'mask', name: '口罩', word: 'mask', opt: true, use: '避免吸入灰塵、煙霧。', icon: '<path d="M4 9c3-2 13-2 16 0v4c0 3-4 5-8 5s-8-2-8-5z"/><path d="M4 10H2M20 10h2M8 12h8"/>' },
-  { id: 'console', name: '遊戲機', decoy: true, use: '好玩，但停電時沒辦法充電，也不能救命。', icon: '<rect x="2" y="7" width="20" height="10" rx="4"/><path d="M7 10v4M5 12h4"/><circle cx="16" cy="11" r="1"/><circle cx="18" cy="13" r="1"/>' },
-  { id: 'snack', name: '洋芋片', decoy: true, use: '好吃但佔空間，乾糧比較耐放、比較有飽足感。', icon: '<path d="M6 3h12l-2 4v14H8V7z"/><path d="M10 12h4"/>' },
-  { id: 'comics', name: '一大疊漫畫', decoy: true, use: '很重又佔空間，防災包要留給救命的東西。', icon: '<path d="M4 4h7v16H4zM13 4h7v16h-7z"/>' },
+  { id: 'water', cat: '水和食物', name: '飲用水', word: 'water', need: true, use: '至少 2 瓶（每瓶約 600 毫升）；可再加輕的水壺。', icon: '<path d="M10 3h4v3l2 3v12H8V9l2-3z"/><path d="M8 13h8"/>' },
+  { id: 'food', cat: '水和食物', name: '不用煮的主食', word: 'food', need: true, use: '提供飽足感，例如罐頭、即食飯、米餅、口糧餅乾。', icon: '<rect x="6" y="5" width="12" height="15" rx="2"/><path d="M6 9h12M6 16h12"/>' },
+  { id: 'snack', cat: '水和食物', name: '能量點心', word: 'energy bar', opt: true, use: '快速補充熱量，例如營養棒、堅果、巧克力、糖果；喜歡的小零食也能安定心情。', icon: '<rect x="3" y="8" width="18" height="8" rx="2"/><path d="M7 8v8M11 8v8"/>' },
+  { id: 'firstaid', cat: '衛生用品', name: '外傷藥膏與包紮用品', word: 'first aid kit', need: true, use: '處理擦傷、割傷的基本包紮用品。', icon: '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5h6v2M12 10v7M8.5 13.5h7"/>' },
+  { id: 'medicine', cat: '衛生用品', name: '常用藥物與處方藥', word: 'medicine', need: true, use: '家人每天要吃的處方藥，以及止痛、止瀉、過敏、感冒等常備藥。', icon: '<rect x="3" y="9" width="18" height="7" rx="3.5" transform="rotate(-30 12 12.5)"/><path d="M10.5 8.5l3 7"/>' },
+  { id: 'mask', cat: '衛生用品', name: '口罩', word: 'mask', opt: true, use: '避免吸入灰塵、煙霧，也能防疫。', icon: '<path d="M4 9c3-2 13-2 16 0v4c0 3-4 5-8 5s-8-2-8-5z"/><path d="M4 10H2M20 10h2M8 12h8"/>' },
+  { id: 'wipes', cat: '衛生用品', name: '衛生紙與濕紙巾', word: 'tissue', opt: true, use: '衛生紙、消毒濕紙巾或酒精，保持清潔；也可帶小條毛巾、生理用品（如有需要）。', icon: '<rect x="4" y="7" width="16" height="12" rx="2"/><path d="M9 7c0-2 6-2 6 0"/>' },
+  { id: 'flashlight', cat: '生活防災用品', name: '手電筒或頭燈', word: 'flashlight', need: true, use: '停電、夜間照明；頭燈可以空出雙手。', icon: '<path d="M3 9h10l4-3v12l-4-3H3z"/><path d="M19 9l2-1M19 15l2 1M19 12h2"/>' },
+  { id: 'battery', cat: '生活防災用品', name: '備用電池', word: 'battery', need: true, use: '手電筒、收音機的電力。', icon: '<rect x="3" y="7" width="16" height="10" rx="1"/><rect x="19" y="10" width="2" height="4"/><path d="M7 12h4M9 10v4"/>' },
+  { id: 'whistle', cat: '生活防災用品', name: '哨子', word: 'whistle', need: true, use: '受困時吹哨求救，比大喊省力、傳得遠。', icon: '<circle cx="9" cy="14" r="5"/><path d="M12 10h9v4h-5"/>' },
+  { id: 'radio', cat: '生活防災用品', name: '可攜式收音機', word: 'radio', need: true, use: '停電、網路斷線時收聽官方消息；手搖發電款更不怕沒電。', icon: '<rect x="3" y="9" width="18" height="11" rx="2"/><path d="M7 9l10-5"/><circle cx="15" cy="14.5" r="2.5"/><path d="M6 13h4M6 16h4"/>' },
+  { id: 'raincoat', cat: '生活防災用品', name: '輕便雨衣與外套', word: 'raincoat', need: true, use: '防風防雨、保暖；機車雨衣也可以。', icon: '<path d="M8 3l4 3 4-3 5 4-3 3v11H6V10L3 7z"/><path d="M12 6v15"/>' },
+  { id: 'papers', cat: '生活防災用品', name: '紙本地圖與聯絡資訊', word: 'map', need: true, use: '寫下家人電話、集結點和路線；手機沒電也看得到。', icon: '<path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14M15 6v14"/>' },
+  { id: 'id', cat: '生活防災用品', name: '身分證、健保卡、存摺', word: 'ID card', need: true, use: '證明身分、就醫、領錢；用夾鏈袋防水。', icon: '<rect x="3" y="6" width="18" height="13" rx="2"/><circle cx="8.5" cy="12" r="2"/><path d="M13 10h5M13 14h4"/>' },
+  { id: 'powerbank', cat: '生活防災用品', name: '充飽的行動電源', word: 'power bank', opt: true, use: '幫手機充電，才能聯絡家人。', icon: '<rect x="6" y="3" width="12" height="18" rx="2"/><path d="M13 7l-3 5h4l-3 5"/>' },
+  { id: 'blanket', cat: '生活防災用品', name: '保暖毯或小型睡袋', word: 'blanket', opt: true, use: '晚上保暖，避免失溫。', icon: '<path d="M4 6h16v12H4z"/><path d="M4 6l16 12M20 6L4 18"/>' },
+  { id: 'gloves', cat: '生活防災用品', name: '工作手套', word: 'gloves', opt: true, use: '防切割、耐磨，清理碎玻璃或雜物時保護雙手。', icon: '<path d="M7 21v-7l-2-3 1-1 3 3V5a1 1 0 0 1 2 0v6V4a1 1 0 0 1 2 0v7V5a1 1 0 0 1 2 0v7V7a1 1 0 0 1 2 0v9a5 5 0 0 1-5 5z"/>' },
+  { id: 'pen', cat: '生活防災用品', name: '紙筆', word: 'pen', opt: true, use: '抄電話、留字條，也能寫下綁止血帶的時間。', icon: '<path d="M4 20l3-1 11-11-2-2L5 17z"/><path d="M14 6l4 4"/>' },
+  { id: 'zipbag', cat: '生活防災用品', name: '夾鏈袋', word: 'zip bag', opt: true, use: '幫證件、藥品防水，也能把物品分類。', icon: '<rect x="4" y="6" width="16" height="14" rx="1"/><path d="M4 9h16"/>' },
+  { id: 'tourniquet', cat: '其他', name: '止血帶', word: 'tourniquet', opt: true, use: '手或腳大量出血、壓不住時使用；要先受過訓練（演習二會用到）。', icon: '<rect x="3" y="9" width="18" height="6" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/>' },
+  { id: 'care', cat: '照護用品', name: '家人照護用品', opt: true, use: '依家人需要準備：嬰兒奶粉尿布、寵物食品與牽繩、長輩的假牙清潔劑或助聽器電池等。', icon: '<path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/>' },
+  { id: 'console', cat: '其他', name: '遊戲機', decoy: true, use: '好玩，但停電時沒辦法充電，也不能救命。', icon: '<rect x="2" y="7" width="20" height="10" rx="4"/><path d="M7 10v4M5 12h4"/><circle cx="16" cy="11" r="1"/><circle cx="18" cy="13" r="1"/>' },
+  { id: 'noodles', cat: '其他', name: '一整箱泡麵', decoy: true, use: '要熱水和開火才能吃，又很佔空間；選不用煮的主食比較好。', icon: '<rect x="3" y="8" width="18" height="12"/><path d="M3 12h18M8 8V5M16 8V5"/>' },
+  { id: 'comics', cat: '其他', name: '一大疊漫畫', decoy: true, use: '很重又佔空間，避難包要留給救命的東西。', icon: '<path d="M4 4h7v16H4zM13 4h7v16h-7z"/>' },
 ];
 
-window.SLOTS = 12;
+window.SLOTS = 14;
+
+// 防災包放哪裡、怎麼選背包（臺北市政府消防局、黑熊學院）
+window.BAG_TIPS = {
+  place: [
+    { t: '家門口附近', ok: true }, { t: '容易拿取的位置', ok: true }, { t: '全家人都知道的地方', ok: true },
+    { t: '也可以放在地震時會躲的桌子下', ok: true }, { t: '不要放在難以拿取的地方（例如櫃子最深處）', ok: false },
+  ],
+  bag: ['用雙肩背包，空出雙手逃生', '先用家裡舊背包就好，先求有再求好', '避免戰術風格或迷彩背包，可能被誤認為民兵', '準備亮色防水背包套，需要求救時比較容易被看見', '原則上要能維持 3 天的基本需求，定期檢查效期並更換'],
+};
+
+window.SOURCES = [
+  { name: '臺北市政府消防局〈緊急避難包〉', url: 'https://www.119.gov.taipei/News_Content.aspx?n=6B7505BEC5A0EB5A&sms=EAB67139FA937B7C&s=BCEF564D91D43444' },
+  { name: '黑熊學院〈先求有再求好，準備避難背包不用花大錢：極簡準備指南〉', url: 'https://kuma-academy.org/article/32' },
+];
 
 /*
  站點：kind 為 prep（平日整備）或 drill（演習）；gobag 站使用專屬的整備畫面。
@@ -101,11 +127,11 @@ window.MISSIONS = [
   {
     id: 'p2', kind: 'prep', gobag: true, code: 'PREP-02', name: '防災包整備', badge: '整備官', words: ['go bag'],
     icon: '<path d="M8 6V4h8v2"/><rect x="4" y="6" width="16" height="15" rx="3"/><path d="M8 13h8M12 10v6"/>',
-    brief: '大災難發生時，可能要馬上離開家。防災包要平常就準備好，放在門口附近，拿了就能走。',
-    flow: ['挑選物品', '放進背包（12 格）', '檢查必備物品', '放在門口附近'],
-    parent: { learn: '防災包的必備物品，以及為什麼需要它們；平時放在容易拿的地方，定期檢查期限。', ask: '「如果只能帶一個背包離開家，你會放什麼？為什麼？」', hint: '想想停電、停水、受傷、和家人失聯時各需要什麼。', real: '一起檢查家裡的防災包：水和食物有沒有過期、電池有沒有電、藥品夠不夠。' },
-    keyPoints: ['防災包要有水、乾糧、手電筒、電池、收音機、哨子', '急救包、個人藥品、證件影本、保暖衣物也要帶', '防災包放在門口附近，定期檢查期限'],
-    myth: { game: '背包裡的東西隨時都有、用不完', real: '東西要平常就準備好，也要定期換掉過期的' },
+    brief: '大災難發生時，可能要馬上離開家，道路和通訊也可能中斷。防災包要平常就準備好，至少能撐 3 天，拿了就能走。',
+    flow: ['選一個雙肩背包', '依四大類挑物品', '檢查必備物品', '放在全家都知道的地方', '定期檢查效期'],
+    parent: { learn: '防災包四大類（水和食物、衛生用品、生活防災用品、照護用品）、放置位置與定期檢查；自己的避難包自己準備，和家人一起討論。', ask: '「如果只能帶一個背包離開家，你會放什麼？為什麼？」', hint: '想想停電、停水、受傷、和家人失聯時各需要什麼。', real: '先用家裡的舊背包，翻一翻衣櫃、廚房、藥箱，一起把孩子自己的避難包裝起來；檢查水和食物的效期、電池有沒有電。' },
+    keyPoints: ['防災包四大類：水和食物、衛生用品、生活防災用品、照護用品', '至少準備 3 天份；用雙肩背包，空出雙手', '放在門口附近、全家都知道的地方，定期檢查效期'],
+    myth: { game: '戰術迷彩背包最帥，東西隨時用不完', real: '避難背包避免戰術、迷彩樣式，以免被誤認為民兵；東西要平常準備好、定期更換' },
   },
   {
     id: 'p3', kind: 'prep', code: 'PREP-03', name: '家庭集結點', badge: '集結指揮官', scene: 'town', words: ['meeting point'],
@@ -218,8 +244,8 @@ window.MISSIONS = [
           { t: '把絞棒卡進固定夾，讓它不會鬆開', ok: true, fb: '對！固定好才不會鬆掉。' },
           { t: '放手讓它自己停著', fb: '絞棒會轉回去，止血帶就鬆了。' },
         ] },
-      { type: 'item', need: 'marker', radio: '記下綁上止血帶的時間！', prompt: '從防災包拿出可以寫時間的物品', time: true, scene: 'leg',
-        alt: '沒帶麥克筆，用手機記下時間，並告訴大人和救護人員。' },
+      { type: 'item', need: 'pen', radio: '記下綁上止血帶的時間！', prompt: '從防災包拿出可以寫時間的物品', time: true, scene: 'leg',
+        alt: '沒帶紙筆，用手機記下時間，並告訴大人和救護人員。' },
       { type: 'choice', radio: '他說很痛，想把止血帶鬆開。', prompt: '可以鬆開嗎？', scene: 'leg',
         options: [
           { t: '不行，不要自己鬆開；請大人通報救護人員，並告訴他們綁上的時間', ok: true, fb: '對！鬆開會再次大量出血，要交給救護人員處理。' },

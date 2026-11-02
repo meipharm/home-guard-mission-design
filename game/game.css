@@ -184,6 +184,9 @@ h2::before { content: ""; width: 6px; height: 22px; background: var(--green); bo
 .zone.hot.hinted rect { stroke: var(--amber); stroke-dasharray: 4 3; animation: pulse 1s ease-in-out infinite alternate; }
 @keyframes pulse { from { fill: rgba(242, 179, 61, 0.05); } to { fill: rgba(242, 179, 61, 0.3); } }
 .found { margin: 6px 0 0; padding-left: 22px; }
+.tips { list-style: none; padding: 0; }
+.tips .yes { color: var(--ink); } .tips .yes::first-letter { color: var(--green); }
+.tips .no { color: var(--alert); }
 .pack-mini { flex-wrap: wrap; }
 .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; text-align: left; margin: 10px 0; }
 .card-grid p { margin: 4px 0; }
