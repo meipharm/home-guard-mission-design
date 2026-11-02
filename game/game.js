@@ -537,7 +537,7 @@
       <p class="eyebrow">${m.code} // ${m.kind === 'extra' ? 'FAMILY PRACTICE' : 'MISSION BRIEFING'}</p>
       <h1 class="with-icon"><span class="m-icon big">${mIcon(m)}</span>${esc(m.name)}</h1>
       <div class="start-top"><button type="button" class="btn big" id="go2">▶ 開始任務</button><span class="note">準備好了就按這裡開始；下面是這關的流程、裝備和單字。</span></div>
-      <div class="viewport preview">${m.gobag ? bagScene(null) : sceneHTML(m, null, m.steps[0])}</div>
+      <div class="viewport preview">${m.gobag ? wrap(SC.bag(null)) : sceneHTML(m, null, m.steps[0])}</div>
       <div class="panel"><p class="radio" style="margin:0"><span class="who">隊長</span>${esc(S.callsign)}，${esc(m.brief)}</p></div>
       ${m.note ? `<div class="callout amber">${esc(m.note)}</div>` : ''}
       ${gate}
@@ -577,8 +577,9 @@
   ROUTES.gobag = function (m, checked) {
     const slots = Array.from({ length: SLOTS }, (_, i) => {
       const id = S.loadout[i];
-      return `<div class="slot ${id ? 'filled' : ''}" title="${id ? esc(ITEM[id].name) : '空格'}">${id ? icon(id) : ''}</div>`;
+      return id ? `<button type="button" class="slot filled" data-rm="${id}" title="拿出：${esc(ITEM[id].name)}" aria-label="拿出 ${esc(ITEM[id].name)}">${icon(id)}</button>` : `<div class="slot" title="空格"></div>`;
     }).join('');
+    const needAll = ITEMS.filter(it => !it.hidden && it.need), needHave = needAll.filter(it => S.loadout.includes(it.id)).length;
     const missNeed = ITEMS.filter(it => !it.hidden && it.need && !S.loadout.includes(it.id));
     const decoys = S.loadout.filter(id => ITEM[id].decoy);
     const report = checked ? `
@@ -601,12 +602,16 @@
     app.innerHTML = `
       <p class="eyebrow">${m.code} // GO BAG</p>
       <h1 class="with-icon"><span class="m-icon big">${mIcon(m)}</span>整理我們家的防災包</h1>
-      <div class="viewport preview">${bagScene(null)}</div>
-      <p class="lead">背包有 ${SLOTS} 格。「優先」的先放，再用剩下的空間取捨「建議」物品。沒有唯一正確的組合，依家人需要調整。</p>
-      <div class="panel"><strong>防災包（${S.loadout.length} / ${SLOTS}）</strong><div class="slots">${slots}</div>
-        <div class="row" style="margin-bottom:0"><button type="button" class="btn" id="check" ${S.loadout.length ? '' : 'disabled'}>檢查防災包</button></div></div>
+      <div class="viewport preview">${wrap(SC.bag(null))}</div>
+      <p class="lead">背包有 ${SLOTS} 格。「優先」的先放，再用剩下的空間取捨「建議」物品。沒有唯一正確的組合，依家人需要調整。<strong>你的防災包就在旁邊（手機在上方），放進去的東西會馬上出現，點一下格子可以拿出來。</strong></p>
       ${report}
-      ${CATS.map((cat, i) => `<h2>${i < 4 ? `${i + 1}. ` : ''}${esc(cat)}</h2><div class="items">${group(cat)}</div>`).join('')}
+      <div class="gobag-layout">
+        <div class="gb-items">${CATS.map((cat, i) => `<h2>${i < 4 ? `${i + 1}. ` : ''}${esc(cat)}</h2><div class="items">${group(cat)}</div>`).join('')}</div>
+        <aside class="gb-side" aria-label="我的防災包"><div class="panel bagpanel"><strong>🎒 我的防災包（${S.loadout.length} / ${SLOTS}）</strong><div class="slots">${slots}</div>
+          <p class="note gb-need">優先物品：已放 ${needHave} / ${needAll.length}</p>
+          <button type="button" class="btn" id="check" ${S.loadout.length ? '' : 'disabled'}>檢查防災包</button></div></aside>
+      </div>
+      <div class="gb-bar"><span>🎒 <strong>${S.loadout.length} / ${SLOTS}</strong>　優先 ${needHave} / ${needAll.length}</span><button type="button" class="btn" id="check2" ${S.loadout.length ? '' : 'disabled'}>檢查防災包</button></div>
       <p class="note">清單參考：${SOURCES.slice(2, 5).map(s => `<a href="${s.url}" target="_blank" rel="noopener">${esc(s.name)}</a>`).join('、')}。「優先」與「建議」是本遊戲為孩子整理的順序，請依家人需要調整。</p>
       ${parentCard(m)}`;
     $$('[data-item]').forEach(b => b.onclick = () => {
@@ -619,7 +624,8 @@
       ROUTES.gobag(m, false);
       window.scrollTo(0, y);
     });
-    $('#check').onclick = () => { ROUTES.gobag(m, true); $('#report').scrollIntoView({ block: 'center' }); };
+    $$('[data-rm]').forEach(b => b.onclick = () => { S.loadout = S.loadout.filter(x => x !== b.dataset.rm); save(); const y = window.scrollY; ROUTES.gobag(m, false); window.scrollTo(0, y); });
+    $('#check').onclick = $('#check2').onclick = () => { ROUTES.gobag(m, true); $('#report').scrollIntoView({ block: 'center' }); };
     if (checked) $('#finish').onclick = () => startRun(m);
   };
 
@@ -927,7 +933,7 @@
     <p class="eyebrow">HOME GUARD // 家庭緊急聯絡卡</p><h3>家庭緊急聯絡卡</h3>
     ${line('家長／照顧者 1　姓名與電話')}${line('家長／照顧者 2　姓名與電話')}${line('外地聯絡人　姓名與電話')}
     ${line('第一集結點（家附近）')}${line('第二集結點（較遠）')}${line('學校避難集合地點')}${line('家中避難包放在')}${line('特別需求（過敏、藥物…）')}
-    <p class="cc-num"><b>119</b> 火災、緊急救護　<b>110</b> 警察</p>
+    <p class="cc-num"><b class="n119">119</b> 火災、緊急救護　<b class="n110">110</b> 警察</p>
     <p class="note">電話打不通時傳簡訊；到了集結點就留下來等。內容請家長手寫，並放進防災包。</p></div>`;
 
   function printArea(which) {
@@ -936,6 +942,9 @@
     window.addEventListener('afterprint', done);
     try { window.print(); } catch (e) { done(); toast('這個瀏覽器無法開啟列印視窗。'); }
   }
+
+  // 關鍵卡的重點：把第一段關鍵句加粗（到第一個「：」或「，」為止），一眼抓到重點
+  const lead = t => { const i = t.search(/[：，]/); return i > 0 && i < 20 ? `<strong>${esc(t.slice(0, i))}</strong>${esc(t.slice(i))}` : `<strong>${esc(t)}</strong>`; };
 
   // ---------- 防災關鍵卡：六關各一組「孩子須知」（固定內容，不需挑選） ----------
   ROUTES.card = function () {
@@ -947,8 +956,8 @@
         <p class="eyebrow">HOME GUARD // 防災關鍵卡</p>
         <h3>先保護自己，再幫助別人</h3>
         <div class="kc-grid">${MAIN.map(m => `<section class="kc"><header><span class="m-icon">${mIcon(m)}</span><b>${m.no}. ${esc(m.name.split('：')[0])}</b></header>
-          <p class="slogan">${esc(m.slogan)}</p><ul>${m.keyPoints.map(k => `<li>${esc(k.t)}</li>`).join('')}</ul></section>`).join('')}</div>
-        <p class="cc-num"><b>119</b> 火災、緊急救護　<b>110</b> 警察</p>
+          <p class="slogan">★ ${esc(m.slogan)}</p><ul>${m.keyPoints.map(k => `<li>${lead(k.t)}</li>`).join('')}</ul></section>`).join('')}</div>
+        <p class="cc-num"><b class="n119">119</b> 火災、緊急救護　<b class="n110">110</b> 警察</p>
         <div class="promise"><b>家庭防災小約定</b>
           ${lineV('第一集結點（家附近）', S.family.first)}${lineV('第二集結點（較遠）', S.family.second)}${lineV('緊急聯絡人（稱呼）', '')}${lineV('聯絡電話（手寫）', '')}${lineV('學校避難集合地點', '')}${lineV('避難包放在', '')}${lineV('我們約好的集合方式', '')}
         </div>

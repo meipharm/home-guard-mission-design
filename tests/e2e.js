@@ -158,6 +158,9 @@ window.runE2E = async function () {
   ok('防災包最多 14 格', HG.S.loadout.length === 14, HG.S.loadout.length);
   ok('滿格有提示', /滿了/.test(q('#toast').textContent));
   q(`[data-item="${HG.S.loadout[0]}"]`).click(); ok('可拿出物品', HG.S.loadout.length === 13);
+  ok('防災包在側邊（獨立欄位，電腦版固定在畫面上）', !!q('.gb-side .slots') && qa('.gb-side [data-rm]').length === HG.S.loadout.length && !!q('.gobag-layout'));
+  { const before = HG.S.loadout.length, rm = q('.gb-side [data-rm]'); rm.click(); ok('點背包格子可以拿出物品', HG.S.loadout.length === before - 1); }
+  ok('側邊背包顯示已放數量與優先物品進度', q('.bagpanel').textContent.includes('/ 14') && q('.bagpanel').textContent.includes('優先物品：已放'));
   ok('物品卡有英文單字與發音鍵', qa('.item-card .word .say').length >= 30);
   ok('物品有用途與音節（不含隱藏的止血帶）', qa('.item-card .syl').length >= 15 && qa('.item-card .use').length === HG.ITEMS.filter(i => !i.hidden).length);
   ok('防災包不再出現止血帶', !q('main').textContent.includes('止血帶'));
