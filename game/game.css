@@ -657,3 +657,11 @@ p, li, .note, .lead, .mission-card .note, .fb, .radio, .opt { text-wrap: pretty;
   #printroot .s-info { grid-template-columns: repeat(3, 1fr) !important; }
   #printroot .stamps { grid-template-columns: repeat(3, 1fr) !important; }
 }
+
+/* 播放三角形：用 CSS 畫，不依賴字元（iPhone 會把「▶」顯示成藍色表情圖示） */
+.tri { display: inline-block; width: 0; height: 0; border-style: solid; border-width: 7px 0 7px 12px; border-color: transparent transparent transparent currentColor; margin-right: 8px; vertical-align: -1px; }
+.btn.big .tri { border-width: 10px 0 10px 16px; vertical-align: -2px; }
+
+/* 呼號放在標題區、開始按鈕正上方 */
+.hero-cs { margin: 10px 0 0; }
+.hero-cs input { width: 170px; }
