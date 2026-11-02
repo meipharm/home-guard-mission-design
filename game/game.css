@@ -638,3 +638,9 @@ button.g-brand:hover { color: var(--green); }
   .print-bag .bagcard .bc-remind strong { color: #7c2d12 !important; }
   .print-bag .bagcard .bc-meta b, .print-bag .bagcard .bc-log b { color: #14532d !important; }
 }
+
+/* 換行排版：標題平衡換行、段落避免單字落單（孤字） */
+h1, h2, h3, .mname, .msub, .goal b, .prompt, .unlock .phrase { text-wrap: balance; }
+p, li, .note, .lead, .mission-card .note, .fb, .radio, .opt { text-wrap: pretty; }
+.mission-card .msub { display: block; font-size: 15px; font-weight: bold; color: var(--green); line-height: 1.35; }
+.mission-card .mname { font-size: 20px; }

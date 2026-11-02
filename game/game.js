@@ -535,7 +535,7 @@
 
   const card = m => `
     <button type="button" class="mission-card ${S.done[m.id] ? 'done' : ''}" data-m="${m.id}">
-      <span class="mc-head"><span class="m-icon">${mIcon(m)}</span><span class="mc-titles"><span class="code">${m.no ? '第 ' + m.no + ' 關' : '家庭練習'}${m.advanced ? '｜進階・家長陪同' : ''}</span><span class="mname">${esc(m.name)}</span></span></span>
+      <span class="mc-head"><span class="m-icon">${mIcon(m)}</span><span class="mc-titles"><span class="code">${m.no ? '第 ' + m.no + ' 關' : '家庭練習'}${m.advanced ? '｜進階・家長陪同' : ''}</span><span class="mname">${esc(m.name.split('：')[0])}</span>${m.name.includes('：') ? `<span class="msub">${esc(m.name.split('：').slice(1).join('：'))}</span>` : ''}</span></span>
       <span class="note">${esc(m.brief)}</span>
       <span class="status">${S.done[m.id] ? '✓ 完成｜' + esc(m.badge) : '待執行'}</span>
     </button>`;
