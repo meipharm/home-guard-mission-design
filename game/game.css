@@ -461,3 +461,13 @@ th { background: var(--panel-2); color: var(--green); }
   .print-stamps #stampcard .stamp .s-star { color: #f59e0b !important; }
   .print-stamps #stampcard .s-sum { color: #14532d !important; }
 }
+
+/* 任務卡：左圖示、右標題，說明在下，狀態標籤在最下面（標題再長也不會繞到圖示下或被標籤蓋住） */
+.mission-card { display: flex; flex-direction: column; gap: 10px; text-align: left; min-width: 0; }
+.mission-card .mc-head { display: flex; gap: 12px; align-items: center; }
+.mission-card .m-icon { float: none; margin: 0; flex: none; }
+.mission-card .mc-titles { display: flex; flex-direction: column; min-width: 0; }
+.mission-card .mname { font-size: 19px; line-height: 1.35; overflow-wrap: anywhere; }
+.mission-card .note { margin: 0; line-height: 1.6; }
+.mission-card .status { position: static; align-self: flex-start; margin-top: auto; padding: 1px 10px; }
+.missions { align-items: stretch; }

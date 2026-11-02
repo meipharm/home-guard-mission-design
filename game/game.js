@@ -451,7 +451,6 @@
         <ul style="margin:4px 0 0">
           <li>這是模擬演練，沒有真的警報，也不會真的撥打電話；防災與急救內容整理自公開資料，不代表任何機關認證。</li>
           <li>真實遇到狀況：先保護自己，大聲叫大人，撥打 119（火災、救護）或 110（警察）。</li>
-          <li>止血帶是進階單元，建議家長或老師陪同；只用虛擬模型，不要在真人身上練習綁緊。</li>
           <li>本機只儲存勾選與關卡進度，不儲存姓名、住址或電話，也不會上傳。</li>
         </ul>
       </div>
@@ -482,11 +481,9 @@
 
   const card = m => `
     <button type="button" class="mission-card ${S.done[m.id] ? 'done' : ''}" data-m="${m.id}">
-      <span class="status">${S.done[m.id] ? '完成｜' + esc(m.badge) : '待執行'}</span>
-      <span class="m-icon">${mIcon(m)}</span>
-      <span class="code">${m.no ? '第 ' + m.no + ' 關' : '家庭練習'}${m.advanced ? '｜進階・家長陪同' : ''}</span>
-      <span class="mname">${esc(m.name)}</span>
+      <span class="mc-head"><span class="m-icon">${mIcon(m)}</span><span class="mc-titles"><span class="code">${m.no ? '第 ' + m.no + ' 關' : '家庭練習'}${m.advanced ? '｜進階・家長陪同' : ''}</span><span class="mname">${esc(m.name)}</span></span></span>
       <span class="note">${esc(m.brief)}</span>
+      <span class="status">${S.done[m.id] ? '✓ 完成｜' + esc(m.badge) : '待執行'}</span>
     </button>`;
 
   ROUTES.hub = function () {
@@ -498,9 +495,9 @@
       ${stampCard(null, true)}
       <div class="row"><button type="button" class="btn ghost" data-go="stamps">看完整集點卡</button></div>
       ${GROUPS.map(g => `<h2>${esc(g.t)}</h2><div class="missions">${g.ids.map(id => card(MBY[id])).join('')}</div>`).join('')}
-      <h2>四、家庭防災練習</h2>
+      <h2>三、家庭防災練習</h2>
       <div class="missions">${card(MBY.p1)}
-        <button type="button" class="mission-card" data-go="family"><span class="m-icon">${svg24('<path d="M5 4h14v16H5z"/><path d="M9 9l2 2 4-4M9 15h6"/>')}</span><span class="code">FAMILY</span><span class="mname">家庭防災檢查表與聯絡卡</span><span class="note">勾選 7 項家庭防災行動，列印空白的家庭緊急聯絡卡，讓家長手寫。</span></button></div>
+        <button type="button" class="mission-card" data-go="family"><span class="mc-head"><span class="m-icon">${svg24('<path d="M5 4h14v16H5z"/><path d="M9 9l2 2 4-4M9 15h6"/>')}</span><span class="mc-titles"><span class="code">FAMILY</span><span class="mname">家庭防災檢查表與聯絡卡</span></span></span><span class="note">勾選 7 項家庭防災行動，列印空白的家庭緊急聯絡卡，讓家長手寫。</span></button></div>
       <div class="row">
         <button type="button" class="btn ghost" data-go="vocab">英文單字庫</button>
         <button type="button" class="btn ghost" data-go="card">防災關鍵卡</button>
@@ -983,10 +980,10 @@
       <ul class="src">${SOURCES.map(s => `<li><a href="${s.url}" target="_blank" rel="noopener">${esc(s.name)}</a><br><span class="note">用在：${esc(s.used)}</span></li>`).join('')}</ul>
       <h2>已核對與尚待確認</h2>
       <ul>
-        <li><strong>已對照官方頁面：</strong>地震（室內蹲下或趴下、躲堅固桌下、保護頭頸）、防空警報（警報聲、室內與戶外掩蔽方式、避難姿勢、解除聲）、大量出血（直接加壓、止血帶位置與記錄時間、頸頭胸腹不可用）、緊急避難包清單。</li>
+        <li><strong>已對照官方頁面：</strong>地震（室內蹲下或趴下、躲堅固桌下、保護頭頸）、防空警報（警報聲、室內與戶外掩蔽方式、避難姿勢、解除聲）、大量出血（直接加壓、止血帶位置與記錄時間、頸頭胸腹不可用；這部分的關卡目前隱藏）、緊急避難包清單。</li>
         <li><strong>一般防災原則、請家長自行對照：</strong>火災逃生（不搭電梯、不躲浴室、濃煙擋路關門求救）、颱風淹水（不涉水、不碰掉落電線）、與家人失散（找可靠的大人、不跟不明人士走）、一般擦傷處理、居家防災檢查。</li>
         <li><strong>「趴下、掩護、穩住」中的「穩住」：</strong>為國際常用口訣；全民安全指引只列蹲下或趴下、掩護、保護頭頸、等待搖晃停止。</li>
-        <li><strong>止血帶：</strong>只做虛擬認識，需受過訓練並由大人操作；請參加實體急救課程。</li>
+        <li><strong>止血帶（關卡目前隱藏）：</strong>若日後恢復，只做虛擬認識，需受過訓練並由大人操作；請參加實體急救課程。</li>
       </ul>
       <div class="row"><button type="button" class="btn" data-go="hub">回演習基地</button></div>`;
   };
