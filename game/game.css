@@ -671,3 +671,10 @@ p, li, .note, .lead, .mission-card .note, .fb, .radio, .opt { text-wrap: pretty;
   body.printing #printroot { max-height: 280mm; overflow: hidden; break-inside: avoid; page-break-after: avoid; page-break-inside: avoid; }
   body.printing, html:has(body.printing) { height: auto; }
 }
+
+/* iPhone / iPad Safari 的列印可用範圍較小（頁首頁尾、邊界），整張卡縮小才會是一頁 */
+@media print {
+  @supports (-webkit-touch-callout: none) {
+    body.printing #printroot { zoom: 0.78; max-height: calc(250mm / 0.78); }
+  }
+}
